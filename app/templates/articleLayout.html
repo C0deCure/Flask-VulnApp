@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    </head>
+    <body>
+        <nav id="header">
+            <div class="wrap">
+                <div id="logo">    
+                    <a href="{{ url_for('main.index') }}">
+                        <img id="img" src="{{ url_for('static', filename='images/logo.png') }}">
+                    </a>
+                    <p>
+                        <span class="eta">에브리타임</span>
+                        <span class="schoolname">김경동</span>
+                    </p>
+                </div>
+                <div id="account">
+                    {% if current_user.is_authenticated %}
+                        <p>{{ current_user.id }} 님 안녕하세요</p>
+                        <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="button">로그인</a>
+                        <a href="{{ url_for('auth.register') }}" class="button red">회원가입</a>
+                    {% endif %}
+                </div>
+                <div id="menu">
+                    <ul> 
+                        <li> 
+                            <a href="#">게시판</a>
+                        </li> 
+                        <li> 
+                            <a href="#">시간표</a>
+                        </li> 
+                        <li> 
+                            <a href="#">강의평가</a>
+                        </li> 
+                        <li> 
+                            <a href="#">학점계산기</a>
+                        </li> 
+                        <li> 
+                            <a href="#">친구</a>
+                        </li> 
+                        <li> 
+                            <a href="#">책방</a>
+                        </li> 
+                        <li> 
+                            <a href="#">캠퍼스픽</a>
+                        </li> 
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="submenu">
+            <div class="wrap">
+                <ul>
+                    <li>
+                        <a href="/free" class="submenumini">자유게시판</a>
+                    </li>
+                    <li>
+                        <a href="/secret" class="submenumini">비밀게시판</a>
+                    </li>
+                    <li>
+                        <a href="/grad" class="submenumini">졸업게시판</a>
+                    </li>
+                    <li>
+                        <a href="/new" class="submenumini">새내기게시판</a>
+                    </li>
+                    <li>
+                        <a href="/info" class="submenumini">정보게시판</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">취업·진로</a>
+                    </li>
+                    <li>
+                        <a href="/prom" class="submenumini">홍보게시판</a>
+                    </li>
+                    <li>
+                        <a href="/team" class="submenumini">동아리·학회</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">신문사</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">아이돌 게시판</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">끝말잇기</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">띵곡게시판</a>
+                    </li>
+                    <li>
+                        <a href="#" class="submenumini">영화게시판</a>
+                    </li>
+                    <li>
+                        <a href="/market" class="submenumini">장터</a>
+                    </li>
+                    <li>
+                        <a href="/info" class="submenumini">정보게시판</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="wrap">
+            <div id="box">
+                {% block content %}{% endblock %}
+                <div id="right"> 
+                    <div id="rightbar">
+                        <div id="rsearch"></div>
+                        <div id="rarticle1"></div>
+                        <div id="rarticle2"></div>
+                        <div id="rarticle3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">EveryTime CloneCoding</div>
+    </body>
+</html> 
