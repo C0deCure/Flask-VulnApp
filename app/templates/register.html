@@ -23,14 +23,18 @@
                 <h3>회원가입</h3>
             </div>
             <form action="{{ url_for('auth.register') }}" method="post">
+                {{ form.csrf_token }}
                 <p class="input">
-                    <input type="text" name="userid" placeholder="아이디" class="text" required>
+                    <input type="text" name="username" placeholder="아이디" class="text" required>
                 </p>
                 <p class="input">
-                    <input type="password" name="password" placeholder="비밀번호" class="text" required>
+                    <input type="password" name="password1" placeholder="비밀번호" class="text" required>
                 </p>
                 <p class="input">
-                    <input type="password" name="confirm_password" placeholder="비밀번호 확인" class="text" required>
+                    <input type="password" name="password2" placeholder="비밀번호 확인" class="text" required>
+                </p>
+                <p class="input">
+                    <input type="text" name="email" placeholder="email" class="text" required>
                 </p>
                 <p class="submit">
                     <input type="submit" value="회원가입" class="text">

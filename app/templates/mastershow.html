@@ -1,0 +1,48 @@
+{% extends "articleLayout.html" %}
+
+{% block content %}
+    <div id="main">
+        <div id="board">
+            <div id="title" class="article">
+                <h1>
+                    <a href="/board/{{ board.url }}">{{ board.name }}</a>
+                </h1>
+            </div>
+            <div id="text" class="article">
+                <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
+                <div class="profile">
+                    <h3 class="large">{{ post.id }}</h3>
+                    <time class="large">비공개</time>
+                    {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                        <a href="/board/{{ board.url }}/delete/{{ post.id }}">
+                            <p class="delete">삭제</p>
+                        </a>
+                        <a href="/board/{{ board.url }}/edit/{{ post.id }}">
+                            <p class="edit">수정</p>
+                        </a>
+                    {% endif %}
+                    <h2 class="large">{{ post.title }}</h2>
+                    <p id="post-text" class="large"></p>
+                </div>
+            </div>
+            <div id="comment" data-post-id="{{ post.id }}">
+                <div class="parent" id="parent">
+                    <img class="commentpro" src="{{ url_for('static', filename='images/0.png') }}">
+                    <h3 class="medium">익명</h3>
+                    <p class="large">아기고양이가 어디있다는 거에요? 아기고양이가?3</p>
+                </div>
+                <form action="/board/{{ board.url }}/{{ post.id }}/comment" method="post" class="writecomment">
+                    <input type="text" id="commentInput" name="text" placeholder="댓글을 입력하세요" class="commentblank">
+                    <input type="submit" id="submit-btn" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+    const textContent = "{{ post.text | safe }}";
+    document.getElementById("post-text").innerHTML = textContent;
+</script>
+<script src="{{ url_for('static', filename='js/comments.js') }}"></script>
+{% endblock %}

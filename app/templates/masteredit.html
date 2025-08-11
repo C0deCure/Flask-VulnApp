@@ -5,16 +5,17 @@
         <div id="board">
             <div id="title" class="article">
                 <h1>
-                    <a href="/new">새내기게시판</a> 
+                    <a href="/{{ board.url }}">{{ board.name }}</a>
                 </h1>
             </div>
             <div id="writeArticle">
                 <form class="write" method="post">
+                    {{ form.csrf_token }}
                     <p> 
-                        <input name="title" class="title" value="{{ row.n_title }}">
+                        <input name="title" class="title" value="{{ post.title }}">
                     </p>
                     <p> 
-                        <textarea name="text" class="smallplaceholder large" placeholder="{{ row.n_txt }}"></textarea>
+                        <textarea name="text" class="smallplaceholder large" placeholder="{{ post.text }}"></textarea>
                     </p>
                     <input type="submit" class="submit">
                 </form>

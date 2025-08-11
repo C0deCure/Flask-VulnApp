@@ -19,7 +19,7 @@
                 </div>
                 <div id="account">
                     {% if current_user.is_authenticated %}
-                        <p>{{ current_user.id }} 님 안녕하세요</p>
+                        <p>{{ current_user.username }} 님 안녕하세요</p>
                         <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
                     {% else %}
                         <a href="{{ url_for('auth.login') }}" class="button">로그인</a>
@@ -57,28 +57,28 @@
             <div class="wrap">
                 <ul>
                     <li>
-                        <a href="/free" class="submenumini">자유게시판</a>
+                        <a href="/board/free" class="submenumini">자유게시판</a>
                     </li>
                     <li>
-                        <a href="/secret" class="submenumini">비밀게시판</a>
+                        <a href="/board/secret" class="submenumini">비밀게시판</a>
                     </li>
                     <li>
-                        <a href="/grad" class="submenumini">졸업게시판</a>
+                        <a href="/board/grad" class="submenumini">졸업게시판</a>
                     </li>
                     <li>
-                        <a href="/new" class="submenumini">새내기게시판</a>
+                        <a href="/board/new" class="submenumini">새내기게시판</a>
                     </li>
                     <li>
-                        <a href="/info" class="submenumini">정보게시판</a>
+                        <a href="/board/info" class="submenumini">정보게시판</a>
                     </li>
                     <li>
                         <a href="#" class="submenumini">취업·진로</a>
                     </li>
                     <li>
-                        <a href="/prom" class="submenumini">홍보게시판</a>
+                        <a href="/board/prom" class="submenumini">홍보게시판</a>
                     </li>
                     <li>
-                        <a href="/team" class="submenumini">동아리·학회</a>
+                        <a href="/board/team" class="submenumini">동아리·학회</a>
                     </li>
                     <li>
                         <a href="#" class="submenumini">신문사</a>
@@ -96,10 +96,10 @@
                         <a href="#" class="submenumini">영화게시판</a>
                     </li>
                     <li>
-                        <a href="/market" class="submenumini">장터</a>
+                        <a href="/board/market" class="submenumini">장터</a>
                     </li>
                     <li>
-                        <a href="/info" class="submenumini">정보게시판</a>
+                        <a href="/board/info" class="submenumini">정보게시판</a>
                     </li>
                 </ul>
             </div>
@@ -119,5 +119,9 @@
             </div>
         </div>
         <div id="footer">EveryTime CloneCoding</div>
+        <!-- custom js start -->
+        {% block script %}
+        {% endblock %}
+        <!-- custom js end -->
     </body>
 </html> 

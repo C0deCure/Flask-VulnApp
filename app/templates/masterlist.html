@@ -5,17 +5,17 @@
         <div id="board">
             <div id="title" class="article">
                 <h1>
-                    <a href="/info">{{ title }}</a> 
+                    <a href="{{ url_for('board.board_list', board_name=board.name) }}">{{ board.name }}</a>
                 </h1>
             </div>
-            <a id="writeArticleButton" href="/info/write">새글을 작성해주세요</a>
+            <a id="writeArticleButton" href="/board/{{ board.url }}/write">새글을 작성해주세요</a>
             
-            {% for info in infos %}
+            {% for master in masters %}
                 <article>
-                    <a href="/info/{{ info.i_num }}" class="articlelist">
-                        <h2 class="medium">{{ info.i_title }}</h2>
-                        <p class="small">{{ info.i_txt }}</p>
-                        <h3 class="small">{{ info.id }}</h3>
+                    <a href="{{ url_for('board.detail', board_name=board.name ,post_id=master.id) }}" class="articlelist">
+                        <h2 class="medium">{{ master.title }}</h2>
+                        <p class="small">{{ master.text }}</p>
+                        <h3 class="small">{{ master.id }}</h3>
                     </a>
                     <div class="blanc"></div>
                 </article>

@@ -5,11 +5,12 @@
         <div id="board">
             <div id="title" class="article">
                 <h1>
-                    <a href="/grad">졸업게시판</a> 
+                    <a href="/board/{{ board.url }}">{{ board.name }}</a>
                 </h1>
             </div>
             <div id="writeArticle">
                 <form class="write" method="post">
+                    {{ form.csrf_token }}
                     <p> 
                         <input name="title" placeholder="글 제목" class="title">
                     </p>
