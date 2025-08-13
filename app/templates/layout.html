@@ -13,14 +13,24 @@
                         <img id="img" src="{{ url_for('static', filename='images/logo.png') }}">
                     </a>
                     <p>
-                        <span class="eta">에브리타임</span>
-                        <span class="schoolname">김경동</span>
+                        <span class="schoolname">SMULife</span>
                     </p>
                 </div>
-                <div id="account">
+                <div id="account" style="display: flex; align-items: center;">
                     {% if current_user.is_authenticated %}
-                        <p>{{ current_user.id }} 님 안녕하세요</p>
+                        <a href="{{ url_for('message.room_list') }}" title="쪽지함" 
+                        style="margin-right: 10px; border: none; background: none; padding: 0;">
+                            <img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함" style="vertical-align: middle;">
+                        </a>
+                        
+                        <a href="#" title="마이페이지" 
+                        style="margin-right: 15px; border: none; background: none; padding: 0;">
+                            <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
+                        </a>
+                        
+                        <span style="margin-right: 10px;">{{ current_user.id }} 님 안녕하세요</span>
                         <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+
                     {% else %}
                         <a href="{{ url_for('auth.login') }}" class="button">로그인</a>
                         <a href="{{ url_for('auth.register') }}" class="button red">회원가입</a>
