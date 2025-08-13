@@ -3,6 +3,7 @@ import os
 import jwt
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from flask import Flask
 
 # 환경 변수 로드
 load_dotenv()
@@ -121,6 +122,38 @@ def init_db():
             )
         """)
         
+        # 쪽지방 테이블
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS room (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # 참여자 테이블
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS participant (
+                room_id INTEGER NOT NULL,
+                user_id TEXT NOT NULL,
+                PRIMARY KEY (room_id, user_id),
+                FOREIGN KEY (room_id) REFERENCES room (id),
+                FOREIGN KEY (user_id) REFERENCES user (id)
+            )
+        """)
+        
+        # 쪽지 테이블
+        cursor.execute("""
+            CREATE TABLE if NOT EXISTS note (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                room_id INTEGER NOT NULL,
+                sender_id TEXT NOT NULL,
+                content TEXT NOT NULL,
+                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (room_id) REFERENCES room (id),
+                FOREIGN KEY (sender_id) REFERENCES user (id)
+            )
+        """)
+        
         db.commit()
 
 def create_jwt_token(user_id):
@@ -181,10 +214,12 @@ def create_app(config_name='default'):
     from app.blueprints.main import main_bp
     from app.blueprints.auth import auth_bp
     from app.blueprints.api import api_bp
+    from app.blueprints.message import message_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(message_bp)
     
     # 데이터베이스 초기화
     with app.app_context():
