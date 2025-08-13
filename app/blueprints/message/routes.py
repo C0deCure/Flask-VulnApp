@@ -179,7 +179,16 @@ def room_delete(room_id):
 def create_from_post(board_type, post_id):
     """게시물 작성자에게 쪽지를 보내는 기능"""
     db = get_db()
-    board_map = {'free': {'table': 'free', 'num_col': 'f_num', 'author_col': 'id'}}
+    board_map = {
+        'free': {'table': 'free', 'num_col': 'f_num', 'author_col': 'id'},
+        'secret': {'table': 'secret', 'num_col': 's_num', 'author_col': 'id'},
+        'grad': {'table': 'grad', 'num_col': 'g_num', 'author_col': 'id'},
+        'market': {'table': 'market', 'num_col': 'm_num', 'author_col': 'id'},
+        'new': {'table': 'new', 'num_col': 'n_num', 'author_col': 'id'},
+        'info': {'table': 'info', 'num_col': 'i_num', 'author_col': 'id'},
+        'prom': {'table': 'prom', 'num_col': 'p_num', 'author_col': 'id'},
+        'team': {'table': 'team', 'num_col': 't_num', 'author_col': 'id'}
+        }
     if board_type not in board_map:
         flash('잘못된 게시판 정보입니다', 'error')
         return redirect(url_for('main.index'))
