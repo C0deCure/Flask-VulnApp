@@ -10,9 +10,10 @@
             </div>
             <div id="text" class="article">
                 <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
-                <div class="profile">
+                <div class="profile" style="position: relative;">
                     <h3 class="large">{{ row.id }}</h3>
                     <time class="large">비공개</time>
+                    
                     {% if current_user.is_authenticated and current_user.id == row.id %}
                         <a href="/free/{{ row.f_num }}/delete">
                             <p class="delete">삭제</p>
@@ -21,6 +22,14 @@
                             <p class="edit">수정</p>
                         </a>
                     {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.id != row.id %}
+                        <a href="{{ url_for('message.create_from_post', board_type='free', post_id=row.f_num) }}" 
+                        style="position: absolute; top: 5px; right: 5px;">
+                            <p class="message">쪽지</p>
+                        </a>
+                    {% endif %}
+
                     <h2 class="large">{{ row.f_title }}</h2>
                     <p class="large">{{ row.f_txt }}</p>
                 </div>
@@ -31,7 +40,7 @@
                     <h3 class="medium">익명</h3>
                     <p class="large">아기고양이가 어디있다는 거에요? 아기고양이가?3</p>
                 </div>
-                <form action="{{ url_for('auth.login') }}" method="post" class="writecomment">
+                <form action="{{ url_for("auth.login") }}" method="post" class="writecomment">
                     <input type="text" name="text" placeholder="댓글을 입력하세요" class="commentblank">
                     <input type="submit" class="submit">
                 </form>

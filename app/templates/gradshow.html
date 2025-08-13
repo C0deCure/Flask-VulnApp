@@ -10,19 +10,28 @@
             </div>
             <div id="text" class="article">
                 <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
-                <div class="profile">
+                <div class="profile" style="position: relative;">
                     <h3 class="large">{{ row.id }}</h3>
                     <time class="large">비공개</time>
+                    
                     {% if current_user.is_authenticated and current_user.id == row.id %}
-                        <a href="/grad/{{ row.g_num }}/delete/{{ row.g_num }}">
+                        <a href="/free/{{ row.f_num }}/delete">
                             <p class="delete">삭제</p>
                         </a>
-                        <a href="/grad/{{ row.g_num }}/edit/{{ row.g_num }}">
+                        <a href="/free/{{ row.f_num }}/edit">
                             <p class="edit">수정</p>
                         </a>
                     {% endif %}
-                    <h2 class="large">{{ row.g_title }}</h2>
-                    <p class="large">{{ row.g_txt }}</p>
+
+                    {% if current_user.is_authenticated and current_user.id != row.id %}
+                        <a href="{{ url_for('message.create_from_post', board_type='grad', post_id=row.g_num) }}" 
+                        style="position: absolute; top: 5px; right: 5px;">
+                            <p class="message">쪽지</p>
+                        </a>
+                    {% endif %}
+
+                    <h2 class="large">{{ row.f_title }}</h2>
+                    <p class="large">{{ row.f_txt }}</p>
                 </div>
             </div>
             <div id="comment">
