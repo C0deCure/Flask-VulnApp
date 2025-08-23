@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const list = document.getElementById("parent");
+    const list = document.getElementById("comment");
     const textInput = document.getElementById("commentInput");
     const submitBtn = document.getElementById("submit-btn");
     const postId = document.getElementById("comment").dataset.postId;
@@ -11,10 +11,42 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(res => res.json())
             .then(data => {
                 data.forEach(comment => {
-                    const li = document.createElement("li");
-                    li.textContent = `${comment.author_id}: ${comment.text}`;
-                    list.appendChild(li);
+                    // parent Div
+                    const parentDiv = document.createElement("div");
+                    parentDiv.classList.add("parent");
+                    parentDiv.setAttribute('data-comment-id', comment.id);
+
+                    // reply-btn
+                    const replyBtn = document.createElement("button")
+                    replyBtn.classList.add("reply-btn");
+                    replyBtn.textContent = "reply"
+
+                    // profile image
+                    const img = document.createElement("img");
+                    img.classList.add("commentpro");
+                    // if you want to make image different for eacg user.id, ...
+                    img.src = "/static/images/0.png";
+
+                    // username
+                    const h3 = document.createElement("h3");
+                    h3.classList.add("medium");
+                    h3.textContent = comment.user_name || "(unknown)";
+
+                    // comment content
+                    const p = document.createElement("p");
+                    p.classList.add("large");
+                    p.textContent = comment.text;
+
+                    // append elements
+                    parentDiv.appendChild(img);
+                    parentDiv.appendChild(h3);
+                    parentDiv.appendChild(p);
+                    parentDiv.appendChild(replyBtn);
+
+                    list.appendChild(parentDiv);
                 });
+
+                addReplyFormToComment();
             });
     }
 
@@ -36,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(comment => {
                 // 성공하면 화면에 바로 추가
                 const li = document.createElement("li");
-                li.textContent = `${comment.author_id}: ${comment.text}`;
+                li.textContent = `${comment.user_name}: ${comment.text}`;
                 list.appendChild(li);
 
                 // 입력창 초기화
@@ -45,6 +77,27 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => {
                 alert("댓글 작성 실패: " + (err.error || "알 수 없는 오류"));
             });
+    }
+
+    function addReplyFormToComment(){
+        document.querySelectorAll(".reply-btn").forEach(btn => {
+            console.log("n")
+            btn.addEventListener("click", function() {
+                const commentDiv = btn.closest(".parent");
+                const commentId = commentDiv.getAttribute("data-comment-id");
+
+                // 숨겨진 폼 가져오기
+                const replyForm = document.getElementById("replyForm");
+                const newForm = replyForm.cloneNode(true);
+
+                // parent_id 세팅
+                newForm.querySelector('[name="parent_id"]').value = commentId;
+
+                // 해당 댓글 바로 아래로 폼 이동시키기
+                commentDiv.appendChild(newForm);
+
+            });
+        });
     }
 
     submitBtn.addEventListener("click", () => {
@@ -57,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         addComment(text);
     });
+
 
     loadComments();
 });

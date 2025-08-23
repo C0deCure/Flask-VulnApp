@@ -33,7 +33,7 @@ class Post(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
     # board = db.relationship('Board', backref=db.backref('posts', lazy='dynamic'))
-    # commment = db.relationship('Comment', backref='post', lazy='dynamic')
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
 class Comment(db.Model):
     """<UNK> <UNK> <UNK>"""
@@ -46,8 +46,13 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now())
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    # parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    user = db.relationship('User', backref=db.backref('comments', lazy='dynamic'))
 
-    post = db.relationship('Post', backref=db.backref('comments', lazy='dynamic'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    # self-referential
+    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    children = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]))
+
+    # post = db.relationship('Post', backref=db.backref('comments', lazy='dynamic'))
     # children = db.relationship('Comment', backref=db.backref('parent', lazy='dynamic'))

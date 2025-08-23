@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class RegisterForm(FlaskForm):
@@ -18,3 +18,4 @@ class PostForm(FlaskForm):
 
 class CommentForm(FlaskForm):
     text = TextAreaField('Comment', validators=[DataRequired()])
+    parent_id = HiddenField("parent comment ID")

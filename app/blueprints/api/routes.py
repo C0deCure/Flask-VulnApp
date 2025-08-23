@@ -1,5 +1,5 @@
 from flask import jsonify, request, current_app, Blueprint
-from app.models import Board, Post, Comment
+from app.models import Board, Post, Comment, User
 
 # Blueprint 생성
 api_bp = Blueprint('api', __name__, url_prefix='/api/v1')
@@ -39,6 +39,7 @@ def get_boardcard():
 @api_bp.route('/comments/<int:post_id>', methods=['GET'])
 def get_comments(post_id):
     comments = Comment.query.filter_by(post_id=post_id).all()
+    # comment.user_id
     result = []
     for comment in comments:
         result.append({
@@ -46,7 +47,7 @@ def get_comments(post_id):
             "text": comment.text,
             "created_at": comment.created_at,
             "updated_at": comment.updated_at,
-            "author_id": comment.user_id,
+            "user_name": comment.user.username,
         })
 
     return jsonify(result)

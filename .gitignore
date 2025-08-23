@@ -50,4 +50,7 @@ instance/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# ignore migrations folder
+migrations/

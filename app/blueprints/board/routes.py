@@ -26,10 +26,10 @@ BOARD_TABLES = {
 board_bp = Blueprint('board', __name__, url_prefix='/board')
 
 # TODO :
-@board_bp.route('/<board_name>')
-def board_list(board_name):
+@board_bp.route('/<board_url>')
+def board_list(board_url):
     """<UNK> <UNK> <UNK>"""
-    board = Board.query.filter_by(name=board_name).first_or_404()
+    board = Board.query.filter_by(url=board_url).first_or_404()
 
     page = request.args.get('page', default=1, type=int)
     post_list = Post.query.filter_by(board_id=board.id)
@@ -40,33 +40,33 @@ def board_list(board_name):
                            masters=post_list)
 
 # TODO : Modify the template(mastershow) to implement the comment.
-@board_bp.route('/<board_name>/<int:post_id>', methods=['GET', 'POST'])
-def detail(board_name, post_id):
+@board_bp.route('/<board_url>/<int:post_id>', methods=['GET', 'POST'])
+def detail(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
     return render_template('mastershow.html', board=board, post=post)
 
 # # Is it safe about CSRF?
-@board_bp.route('/<board_name>/write', methods=['GET', 'POST'])
+@board_bp.route('/<board_url>/write', methods=['GET', 'POST'])
 @login_required
-def write_post(board_name):
+def write_post(board_url):
     """<UNK> <UNK> <UNK>"""
-    board = Board.query.filter_by(name=board_name).first_or_404()
+    board = Board.query.filter_by(url=board_url).first_or_404()
     form = PostForm()
     if request.method == 'POST' and form.validate_on_submit():
-        board = Board.query.filter_by(name=board_name).first_or_404()
+        board = Board.query.filter_by(url=board_url).first_or_404()
         post = Post(title=form.title.data, text=form.text.data, user_id=current_user.id, board_id=board.id)
         db.session.add(post)
         db.session.commit()
         # flash('게시글이 작성되었습니다.', 'success')
-        return redirect(url_for('board.board_list', board_name=board.name))
+        return redirect(url_for('board.board_list', board_url=board.url))
     return render_template('masterwrite.html', board=board, form=form)
 
 # # Is it safe about CSRF?
-@board_bp.route('/<board_name>/delete/<int:post_id>', methods=['GET', 'POST'])
+@board_bp.route('/<board_url>/delete/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def delete_post(board_name, post_id):
+def delete_post(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
@@ -76,12 +76,12 @@ def delete_post(board_name, post_id):
         abort(403)
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for('board.board_list', board_name=board.name))
+    return redirect(url_for('board.board_list', board_url=board.url))
 
 # TODO : Modify the template to implement that you can see what you wrote before in the editor.
-@board_bp.route('/<board_name>/edit/<int:post_id>', methods=['GET', 'POST'])
+@board_bp.route('/<board_url>/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def edit_post(board_name, post_id):
+def edit_post(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
@@ -95,23 +95,33 @@ def edit_post(board_name, post_id):
             form.populate_obj(post)
             post.updated_at = datetime.now()
             db.session.commit()
-            return redirect(url_for('board.board_list', board_name=board.name))
+            return redirect(url_for('board.board_list', board_url=board.url))
     else:
         form = PostForm(obj=post)
 
     return render_template('masteredit.html', board=board, post=post, form=form)
 
 # Is it safe about CSRF?
-@board_bp.route('/<board_name>/<int:post_id>/comment', methods=['POST'])
+@board_bp.route('/<board_url>/<int:post_id>/comment', methods=['POST'])
 @login_required
-def create_comment(board_name, post_id):
+def create_comment(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
     form = CommentForm(meta={'csrf': False})
     if form.validate_on_submit():
-        comment = Comment(text=form.text.data, user_id=current_user.id, post_id=post.id)
+        parent = None
+        if form.parent_id.data:
+            parent = Comment.query.get(form.parent_id.data)
+
+        comment = Comment(
+            text=form.text.data,
+            user_id=current_user.id,
+            post_id=post.id,
+            parent=parent
+        )
+
         post.comments.append(comment)
         db.session.commit()
-        return redirect(url_for('board.board_list', board_name=board.url))
+        return redirect(url_for('board.board_list', board_url=board.url))
     abort(405)
