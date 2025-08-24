@@ -104,7 +104,7 @@ def room_detail(room_id):
 
 @message_bp.route('/<int:room_id>/delete', methods=['POST'])
 def room_delete(room_id):
-    """쪽지방 삭제 (ORM 버전)"""
+    """쪽지방 삭제"""
     room = Room.query.get_or_404(room_id)
     # IDOR 취약점을 위해 권한 확인 로직을 의도적으로 생략    
     db.session.delete(room)
@@ -115,7 +115,7 @@ def room_delete(room_id):
 
 @message_bp.route('/create/from_post/<string:board_type>/<int:post_id>', methods=['GET', 'POST'])
 def create_from_post(board_type, post_id):
-    """게시물에서 쪽지 보내기 (ORM 버전)"""
+    """게시물에서 쪽지 보내기"""
     model = BOARD_MODELS.get(board_type)
     if not model:
         flash('존재하지 않는 게시판입니다.', 'error'); return redirect(url_for('main.index'))
