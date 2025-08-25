@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMULife</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <style>
+        .message-content-area {
+            font-family: sans-serif !important;
+            text-align: left !important;
+        }
+        .message-content-area h4, .message-content-area h5 {
+            font-size: 1.2rem !important;
+            font-weight: bold !important;
+        }
+        .message-content-area strong {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+        }
+        .message-content-area .small {
+            font-size: 0.875rem !important;
+            color: #6c757d !important;
+        }
+        .list-group-item.active {
+            background-color: #fbe6e6 !important;
+            color: #c62917 !important;
+            border-color: #fbe6e6 !important;
+            font-weight: bold;
+        }
+        .message-content-area .sent-message-label {
+            color: #ffc107 !important; 
+        }
+        .message-content-area .received-message-label {
+            color: #20c997 !important;
+        }
+        #account {
+            display: flex;
+            align-items: center;
+        }
+        #account span {
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav id="header">
+        <div class="wrap">
+            <div id="logo">
+                <a href="{{ url_for('main.index') }}"><img id="img" src="{{ url_for('static', filename='images/logo.png') }}"></a>
+                <p><span class="schoolname">SMULife</span></p>
+            </div>
+            <div id="account">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('message.room_list') }}" title="쪽지함" 
+                        style="margin-right: 10px; border: none; background: none; padding: 0;">
+                            <img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함" style="vertical-align: middle;">
+                    </a>
+                    <a href="#" title="마이페이지" 
+                        style="margin-right: 15px; border: none; background: none; padding: 0;">
+                            <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
+                    </a>
+                    <span style="margin-right: 10px;">{{ current_user.id }} 님 안녕하세요</span>
+                    <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+                {% endif %}
+            </div>
+            <div id="menu">
+                <ul>
+                    <li><a href="#">게시판</a></li>
+                    <li><a href="#">시간표</a></li>
+                    <li><a href="#">강의평가</a></li>
+                    <li><a href="#">학점계산기</a></li>
+                    <li><a href="#">친구</a></li>
+                    <li><a href="#">책방</a></li>
+                    <li><a href="#">캠퍼스픽</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 message-content-area">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm rounded-4" style="height: 80vh; display: flex; flex-direction: column;">
+                    <div class="p-3 border-bottom"><h4 class="mb-0">쪽지함</h4></div>
+                    <div class="list-group list-group-flush" style="overflow-y: auto;">
+                        {% for room in rooms %}
+                            <a href="{{ url_for('message.room_detail', room_id=room.room_id) }}" class="list-group-item list-group-item-action py-3 {% if room.room_id == current_room_id %}active{% endif %}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <strong class="mb-1">{{ room.other_user_id }}</strong>
+                                    <small class="text-muted">{{ room.last_date.strftime('%m/%d %H:%M') if room.last_date }}</small>
+                                </div>
+                                <div class="col-10 mb-1 small text-muted text-truncate">{{ room.last_message or "..." }}</div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card shadow-sm rounded-4" style="height: 80vh; display: flex; flex-direction: column;">
+                    <div class="p-3 border-bottom">
+                        <h5 class="mb-0 fw-bold">{{ current_room_name or '익명' }}</h5>
+                    </div>
+                    <div class="p-3 flex-grow-1" style="overflow-y: auto;">
+                        {% for msg in messages %}
+                            <div class="mb-3">
+                                <strong class="mb-1 {% if msg.sender_id == current_user.id %}sent-message-label{% else %}received-message-label{% endif %}">
+                                    {% if msg.sender_id == current_user.id %}보낸 쪽지{% else %}받은 쪽지{% endif %}
+                                </strong>
+                                <small class="text-muted float-end">{{ msg.created_at }}</small>
+                                <p class="mb-0 mt-1" style="word-wrap: break-word; font-size: 1rem;">{{ msg.content | safe }}</p>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                    <div class="p-3 border-top bg-light">
+                        <form method="post">
+                            <div class="input-group">
+                                <textarea name="content" class="form-control" rows="2" placeholder="메시지를 입력하세요..."></textarea>
+                                <button class="btn btn-danger rounded-pill px-3 ms-2" type="submit">전송</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="text-end p-3">
+                        <form action="{{ url_for('message.room_delete', room_id=current_room_id) }}" method="post" onsubmit="return confirm('이 대화방의 모든 메시지를 삭제하시겠습니까?');">
+                            <button type="submit" class="btn btn-danger rounded-pill px-4">전체 삭제</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

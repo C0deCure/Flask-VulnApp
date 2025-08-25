@@ -1,0 +1,49 @@
+{% extends "articleLayout.html" %}
+
+{% block content %}
+    <div id="main">
+        <div id="board">
+            <div id="title" class="article">
+                <h1>
+                    <a href="/market">장터</a> 
+                </h1>
+            </div>
+            <div id="text" class="article">
+                <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
+                <div class="profile" style="position: relative;">
+                    <h3 class="large">{{ row.id }}</h3>
+                    <time class="large">비공개</time>
+                    {% if current_user.is_authenticated and current_user.id == row.id %}
+                        <a href="/market/{{ row.m_num }}/delete/{{ row.m_num }}">
+                            <p class="delete">삭제</p>
+                        </a>
+                        <a href="/market/{{ row.m_num }}/edit/{{ row.m_num }}">
+                            <p class="edit">수정</p>
+                        </a>
+                    {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.id != row.id %}
+                        <a href="{{ url_for('message.create_from_post', board_type='market', post_id=row.m_num) }}" 
+                        style="position: absolute; top: 5px; right: 5px;">
+                            <p class="message">쪽지</p>
+                        </a>
+                    {% endif %}
+
+                    <h2 class="large">{{ row.m_title }}</h2>
+                    <p class="large">{{ row.m_txt }}</p>
+                </div>
+            </div>
+            <div id="comment">
+                <div class="parent">
+                    <img class="commentpro" src="{{ url_for('static', filename='images/0.png') }}">
+                    <h3 class="medium">익명</h3>
+                    <p class="large">아기고양이가 어디있다는 거에요? 아기고양이가?3</p>
+                </div>
+                <form action="{{ url_for("auth.login") }}" method="post" class="writecomment">
+                    <input type="text" name="text" placeholder="댓글을 입력하세요" class="commentblank">
+                    <input type="submit" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
