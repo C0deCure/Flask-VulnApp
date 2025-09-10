@@ -16,6 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     parentDiv.classList.add("parent");
                     parentDiv.setAttribute('data-comment-id', comment.id);
 
+                    // delete-btn
+                    const deleteBtn = document.createElement("button")
+                    deleteBtn.classList.add("delete-btn");
+                    deleteBtn.textContent = "delete"
+
+                    // edit-btn
+
                     // reply-btn
                     const replyBtn = document.createElement("button")
                     replyBtn.classList.add("reply-btn");
@@ -81,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function addReplyFormToComment(){
         document.querySelectorAll(".reply-btn").forEach(btn => {
-            console.log("n")
             btn.addEventListener("click", function() {
                 const commentDiv = btn.closest(".parent");
                 const commentId = commentDiv.getAttribute("data-comment-id");
@@ -98,6 +104,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             });
         });
+    }
+
+    // TODO :
+    async function deleteComment(id) {
+      if (!confirm("정말 삭제하시겠습니까?")) return;
+
+      const res = await fetch(`/api/v1/comments/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        document.querySelector(`[data-comment-id='${id}']`).remove();
+      } else {
+        alert("댓글 삭제 실패!");
+      }
     }
 
     submitBtn.addEventListener("click", () => {
