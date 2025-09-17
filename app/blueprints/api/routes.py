@@ -71,6 +71,7 @@ def update_comment(comment_id):
     return jsonify({"message": "Comment updated", "comment": {"id": comment.id, "content": comment.text}})
 
 # erase comment
+# TODO : login_required (coment CRUD)
 @api_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
 def delete_comment(comment_id):
     comment = Comment.query.get(comment_id)

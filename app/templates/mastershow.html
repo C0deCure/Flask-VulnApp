@@ -36,9 +36,10 @@
     </div>
 {% endblock %}
 {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
 <script type='text/javascript'>
     const textContent = "{{ post.text | safe }}";
-    document.getElementById("post-text").innerHTML = textContent;
+    document.getElementById("post-text").innerHTML = DOMPurify.sanitize(textContent);
 </script>
 <script src="{{ url_for('static', filename='js/comments.js') }}"></script>
 {% endblock %}
