@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <script>
+                    alert('{{ message }}');
+                </script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div id="main">
+        <div id="board">
+            <div id="ad">
+                <img id="mainad" src="{{ url_for('static', filename='images/mainad.jpg') }}">
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+async function loadBoards() {
+    const res = await fetch("/api/v1/boardcard");
+    const boards = await res.json();
+
+    const container = document.getElementById("board");
+    container.innerHTML = "";
+
+    boards.forEach(board => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        let html = `
+            <div id="${board.url}" class="article">
+                <h3>
+                    <a href="board/${board.url}">${board.board_name}</a>
+                </h3>
+                ${board.posts.map(
+                    post => `<a href="board/${board.url}/${post.id}" class="list"><p>${post.title}</p></a>`
+                ).join("")}
+            </div>
+        `;
+
+        card.innerHTML = html;
+        container.appendChild(card);
+    });
+}
+
+loadBoards();
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "articleLayout.html" %}
+
+{% block content %}
+<div id="main">
+    <div id="board">
+        <div id="title" class="article">
+            <h1>
+                <a href="/board/{{ board.url }}">{{ board.name }}</a>
+            </h1>
+        </div>
+        <div id="text" class="article">
+            <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
+            <div class="profile">
+                <h3 class="large">{{ post.id }}</h3>
+                <time class="large">비공개</time>
+                {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                    <a href="/board/{{ board.url }}/delete/{{ post.id }}">
+                        <p class="delete">삭제</p>
+                    </a>
+                    <a href="/board/{{ board.url }}/edit/{{ post.id }}">
+                        <p class="edit">수정</p>
+                    </a>
+                {% endif %}
+                <h2 class="large">{{ post.title }}</h2>
+                <p id="post-text" class="large"></p>
+            </div>
+        </div>
+        <div id="comment" data-post-id="{{ post.id }}" data-current-user-id="{{ current_user.id if current_user.is_authenticated else '' }}">
+            <form id="replyForm" action="/board/{{ board.url }}/{{ post.id }}/comment" method="post" class="writecomment">
+                <input type="text" id="commentInput" name="text" placeholder="댓글을 입력하세요" class="commentblank">
+                <input type="hidden" name="parent_id" value="{{ parent_comment.id if parent_comment else '' }}">
+                <input type="submit" id="submit-btn" class="submit">
+            </form>
+        </div>
+    </div>
+</div>
+<!-- modal begin -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">댓글 수정 📝</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="edit-form">
+          <input type="hidden" id="edit-comment-id">
+
+          <div class="mb-3">
+            <label for="edit-new-content" class="form-label">수정할 내용</label>
+            <textarea class="form-control" id="edit-new-content" rows="5" required></textarea>
+          </div>
+
+          <p id="modal-result-message" class="text-danger text-center"></p>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="submit" form="edit-form" class="btn btn-primary">수정 완료</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- modal end -->
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+<script type='text/javascript'>
+    const textContent = "{{ post.text | safe }}";
+    document.getElementById("post-text").innerHTML = DOMPurify.sanitize(textContent);
+</script>
+<script type='text/javascript'>
+    // ===== Bootstrap 모달 인스턴스 생성 =====
+const editModalElement = document.getElementById('editModal');
+const editModal = new bootstrap.Modal(editModalElement);
+
+// --- 폼 관련 요소 가져오기는 동일 ---
+const editForm = document.getElementById('edit-form');
+const hiddenCommentIdInput = document.getElementById('edit-comment-id');
+const newContentInput = document.getElementById('edit-new-content');
+const modalResultMessage = document.getElementById('modal-result-message');
+
+
+</script>
+<script src="{{ url_for('static', filename='js/comments.js') }}"></script>
+{% endblock %}

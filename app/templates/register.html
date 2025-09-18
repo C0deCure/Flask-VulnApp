@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/loginstyle.css') }}">
+    </head>
+    <body>
+        <div id="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <script>
+                            alert('{{ message }}');
+                        </script>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div id="logo">
+                <a href="{{ url_for('main.index') }}">
+                    <img id="img" src="{{ url_for('static', filename='images/logo.png') }}">
+                </a>
+                <h3>회원가입</h3>
+            </div>
+            <form action="{{ url_for('auth.register') }}" method="post">
+                {{ form.csrf_token }}
+                <p class="input">
+                    <input type="text" name="username" placeholder="아이디" class="text" required>
+                </p>
+                <p class="input">
+                    <input type="password" name="password1" placeholder="비밀번호" class="text" required>
+                </p>
+                <p class="input">
+                    <input type="password" name="password2" placeholder="비밀번호 확인" class="text" required>
+                </p>
+                <p class="input">
+                    <input type="text" name="email" placeholder="email" class="text" required>
+                </p>
+                <p class="submit">
+                    <input type="submit" value="회원가입" class="text">
+                </p>
+            </form>
+            <p class="register">
+                <a href="{{ url_for('auth.login') }}" class="button red">로그인으로 돌아가기</a>
+            </p>
+        </div>
+    </body>
+</html> 

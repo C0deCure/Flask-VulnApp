@@ -1,0 +1,41 @@
+{% extends "articleLayout.html" %}
+
+{% block content %}
+    <div id="main">
+        <div id="board">
+            <div id="title" class="article">
+                <h1>
+                    <a href="{{ url_for('board.board_list', board_url=board.url) }}">{{ board.name }}</a>
+                </h1>
+            </div>
+            <a id="writeArticleButton" href="/board/{{ board.url }}/write">새글을 작성해주세요</a>
+            
+            {% for master in masters %}
+                <article>
+                    <a href="{{ url_for('board.detail', board_url=board.url ,post_id=master.id) }}" class="articlelist">
+                        <h2 class="medium">{{ master.title }}</h2>
+                        <p class="small">{{ master.text }}</p>
+                        <h3 class="small">{{ master.id }}</h3>
+                    </a>
+                    <div class="blanc"></div>
+                </article>
+            {% endfor %}
+            
+            <div class="next">
+                <button method="get" class="nextbutton">다음</button>
+            </div>
+            <div class="pagination">
+                <form id="searchArticleForm" class="search">
+                    <select name="search_type">
+                        <option value="4">전체</option>
+                        <option value="3">해시태그</option>
+                        <option value="2">글제목</option>
+                        <option value="1">글내용</option>
+                    </select>
+                    <input name="keyword" placeholder="검색어를 입력하세요." class="text" required>
+                    <input type="submit" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

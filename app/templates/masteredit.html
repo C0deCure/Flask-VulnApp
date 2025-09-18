@@ -1,0 +1,25 @@
+{% extends "articleLayout.html" %}
+
+{% block content %}
+    <div id="main">
+        <div id="board">
+            <div id="title" class="article">
+                <h1>
+                    <a href="/{{ board.url }}">{{ board.name }}</a>
+                </h1>
+            </div>
+            <div id="writeArticle">
+                <form class="write" method="post">
+                    {{ form.csrf_token }}
+                    <p> 
+                        <input name="title" class="title" value="{{ post.title }}">
+                    </p>
+                    <p> 
+                        <textarea name="text" class="smallplaceholder large" placeholder="{{ post.text }}"></textarea>
+                    </p>
+                    <input type="submit" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

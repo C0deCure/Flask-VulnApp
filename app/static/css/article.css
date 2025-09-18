@@ -1,0 +1,640 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-size: 18px;
+  text-align: center;
+}
+body,
+div,
+nav,
+aside,
+article,
+h1,
+h2,
+h3,
+h4,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+p,
+span,
+form,
+th,
+td,
+input,
+textarea,
+select,
+pre,
+address {
+  color: #666;
+  font-family: "맑은 고딕", 돋움, tahoma;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:focus {
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+/*  ----------------------------헤더------------------------------ */
+#header {
+  display: flex;
+  height: 75px;
+  border-top: 1px solid #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  padding-bottom: 7px;
+  /* position: sticky; */
+  /* top: 4px; */
+  /* background-color: green; */
+}
+#logo {
+  float: left;
+  margin-left: 24px;
+  padding: 12px 16px 20px 0px;
+}
+#logo > a > img {
+  margin-right: 10px;
+  height: 40px;
+  width: 40px;
+}
+#logo > p {
+  display: inline-block;
+}
+.schoolname {
+  display: block;
+  font-size: 22px;
+  padding-left: 10px;
+}
+/* #logo > p > span.name.eta {
+  margin-left: 20px;
+} */
+.eta {
+  margin-top: 20px;
+  margin-left: 3px;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #c62917;
+}
+
+nav > div.wrap {
+  /* background-color: fuchsia; */
+  margin: 0 auto;
+  width: 1180px;
+  height: 100%;
+}
+/* ---- */
+
+#menu {
+  margin: 0 auto;
+  width: 600px;
+  /* height: 100%; */
+}
+#menu > ul > li {
+  display: inline-block;
+  padding: 25px 12px;
+  color: #4c4c4c;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ---- */
+#account {
+  padding: 20px 0;
+  margin-right: 24px;
+  float: right;
+}
+#acount > .button {
+  padding: 0 12px;
+}
+
+#account a {
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #d6d6d6;
+  border-radius: 12px;
+  vertical-align: top;
+  color: #666;
+}
+#account p {
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  /* border: 1px solid #d6d6d6; */
+  /* border-radius: 12px; */
+  vertical-align: top;
+  color: #666;
+}
+
+#account a.button.red {
+  border: 0;
+  color: #fff;
+  font-weight: bold;
+  background-color: #c62917;
+}
+/* ------------------------------------------------------- */
+
+/* ----------------------------서브메뉴-------------------- */
+
+#submenu {
+  border-bottom: 1px solid #d6d6d6;
+  background-color: #f2f2f2;
+}
+#submenu > div.wrap {
+  box-sizing: border-box;
+  font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+#submenu > div.wrap > div.divider {
+  width: 1px;
+  height: 150px;
+  background-color: #e3e3e3;
+  display: inline-block;
+  margin-right: 15px;
+}
+#submenu > div.wrap > ul {
+  margin: -3px auto;
+  max-width: 780px;
+  font-size: 0;
+  white-space: normal;
+}
+#submenu > div.wrap {
+  padding: 15px;
+}
+
+#submenu > div.wrap {
+  box-sizing: border-box;
+  font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+}
+ul,
+ol,
+li,
+menu {
+  list-style-type: none;
+}
+li {
+  padding-bottom: 3px;
+}
+#submenu > div.wrap > ul {
+  margin: -3px auto;
+  max-width: 780px;
+  font-size: 0;
+  white-space: normal;
+}
+#submenu > div.wrap > ul > li {
+  margin: 3px 10px;
+  max-width: 130px;
+}
+
+#submenu > div.wrap > ul > li {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#submenu > div.wrap > ul > li > a {
+  font-size: 14px;
+  color: #4c4c4c;
+}
+/* #submenu > #wrapper1 {
+  margin: 0 auto;
+  padding: 0 550px;
+} */
+
+/* #submenu > div.wrap > div {
+  width: 130px;
+} */
+
+/* #wrapper1 {
+  margin: 0 auto;
+  padding: 0 280px;
+  width: 1080px;
+  background-color: black; */
+/* } */
+
+/* #submenu > .wrap > div {
+  float: left;
+  width: 100px;
+} */
+/* ------------------------------------------------------- */
+
+/* ------------------------------wrap------------ */
+#wrap {
+  margin: 0 auto;
+  width: 1180px;
+  /* background-color: sandybrown; */
+}
+/* -------------------------------------------------- */
+#box {
+  /* padding: 0 50px; */
+  position: relative;
+  margin: 0 auto;
+  min-height: 900px;
+  /* background-color: black; */
+  display: grid;
+  grid-template-areas:
+    "main main b"
+    "main main b"
+    "main main b"
+    "main main ."
+    "footer footer footer";
+  grid-template-columns: 175px 1fr 350px;
+  grid-template-rows: 250px 220px 300px 300px 100px;
+  height: 100%;
+  grid-gap: 5px;
+  grid-auto-flow: column;
+}
+#rightbar {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "rsearch"
+    "rarticle1"
+    "rarticle2"
+    "rarticle3";
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px 232px 232px 232px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
+
+#rsearch {
+  grid-area: rsearch;
+  border: 1px solid #d6d6d6;
+}
+#rarticle1 {
+  grid-area: rarticle1;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+  /* border: 1px solid black; */
+}
+#rarticle2 {
+  grid-area: rarticle2;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+  /* border: 1px solid black; */
+}
+#rarticle3 {
+  grid-area: rarticle3;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+  /* border: 1px solid black; */
+}
+
+#board {
+  float: none;
+  position: relative;
+  word-break: break-all;
+  text-align: left;
+  /* height: 1000px; */
+}
+/* 게시판 제목 글내용 댓글 댓글 입력 설정 */
+#title {
+  padding: 15px;
+  border: 1px solid #d6d6d6;
+  box-sizing: border-box;
+  /* margin-top: 25px; */
+}
+#title > a {
+  text-align: left;
+}
+#title > h3 {
+  color: black;
+}
+
+.profileimg {
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+}
+#text {
+  margin-top: 10px;
+  padding: 15px;
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border: 1px solid #e3e3e3;
+  background-color: #fff;
+}
+#footer,
+#main,
+#right {
+  /* border: 1px solid #999; */
+  margin: 5px;
+  /* padding: 10px; */
+}
+
+#right {
+  grid-area: b;
+  /* background-color: green; */
+}
+
+#footer {
+  grid-area: footer;
+  /* background-color: blue; */
+}
+
+#main {
+  grid-area: main;
+
+  /* min-height: 1000px; */
+  /* background-color: gray; */
+}
+#board > #text > img {
+  float: left;
+  margin: 0 10px 15px 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+#board > #text {
+  display: block;
+  padding: 15px;
+}
+#board > .article > h1 > a {
+  color: #292929;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#board > #text > div.profile > h3.large {
+  color: #292929;
+  height: 20px;
+  max-width: 200px;
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#board > #text > div.profile > time.large {
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: #292929;
+  letter-spacing: 0;
+  /* margin-bottom: 200px; */
+}
+#main > #board > article h2.medium {
+  font-weight: bold;
+  color: #292929;
+}
+
+#board > div.article > .profile > h2.large {
+  padding-top: 15px;
+  /* float: left; */
+  margin-bottom: 15px;
+  color: #292929;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#board > div.article > .profile > a > p.edit {
+  float: right;
+}
+#board > div.article > .profile > a > p.delete {
+  color: red;
+  float: right;
+  margin-left: 10px;
+}
+#board > #comment > .writecomment > .text {
+  width: 100%;
+}
+
+#board > #comment {
+  display: block;
+}
+
+#board > #comment > .writecomment {
+  position: relative;
+  /* border-top: 1px solid #e3e3e3; */
+  border: 1px solid #e3e3e3;
+  background-color: #f8f8f8;
+  width: 100%;
+  height: 40px;
+}
+#board > #comment > .writecomment > input.commentblank {
+  margin: 0;
+  padding: 10px 85px 10px 10px;
+  border: 0;
+  width: 80%;
+  height: 40px;
+  line-height: 20px;
+  box-sizing: border-box;
+  color: #262626;
+  font-size: 13px;
+  overflow: hidden;
+  resize: none;
+  background-color: transparent;
+}
+
+#board > #comment > form.writecomment > input.submit {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 0;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 40px 40px;
+  cursor: pointer;
+  background-color: red;
+  background-image: url("/images/pencil.png");
+}
+#board > #comment > .parent {
+  /* margin-top: 10px; */
+  padding: 15px;
+  border: 1px solid #e3e3e3;
+  background-color: #fff;
+  /* background-color: black; */
+}
+#board > #comment > .parent > img.commentpro {
+  margin: 0 5px 5px 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+#board > #comment > .parent > .commentpro {
+  float: left;
+  display: block;
+}
+#board > #comment > .parent > h3.medium {
+  height: 20px;
+  margin: 0 10px 5px 0;
+  font-size: 12px;
+  /* display: block; */
+}
+#board > #comment > .parent > .large {
+  line-height: 20px;
+  color: #4c4c4c;
+  font-size: 14px;
+}
+
+#main > #board > .next > .nextbutton {
+  float: right;
+}
+
+#writeArticleButton {
+  display: block;
+  margin-bottom: 5px;
+  padding: 0 10px;
+  height: 50px;
+  line-height: 46px;
+  border: 2px solid #d6d6d6;
+  box-sizing: border-box;
+  cursor: text;
+  color: #a6a6a6;
+  font-size: 14px;
+  background: #f9f9f9 url(/images/new/container.write.background.png) no-repeat
+    right center;
+  background-size: 40px 40px;
+}
+
+#board > #writeArticleButton {
+  float: none;
+  position: relative;
+  /* left: 25px; */
+  margin-top: 10px;
+  /* width: 780px; */
+}
+
+#board > #text.articles {
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border: 1px solid #e3e3e3;
+  background-color: #fff;
+}
+#main > #board > article {
+  margin-bottom: -1px;
+  box-sizing: border-box;
+  border: 1px solid #e3e3e3;
+  background-color: #fff;
+}
+
+#main > #board > article > a.articlelist {
+  display: block;
+  padding: 15px;
+}
+#main > #board > article h2.medium {
+  margin-bottom: 5px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: normal;
+}
+#main > #board > article p.small {
+  margin-bottom: 5px;
+  max-height: 30px;
+  line-height: 15px;
+  white-space: normal;
+  overflow: hidden;
+  color: #a6a6a6;
+  font-size: 12px;
+}
+#main > #board > article h3.small {
+  float: left;
+  margin-right: 5px;
+  height: 15px;
+  line-height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: 0;
+  /* padding-bottom: 10px; */
+}
+#main > #board > article div.blanc {
+  padding: 5px;
+}
+
+#board > #writeArticle > form.write {
+  position: relative;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border: 2px solid #d6d6d6;
+  box-sizing: border-box;
+}
+
+#board > #writeArticle > form.write p {
+  padding: 15px;
+  border-bottom: 1px solid #e3e3e3;
+  background-color: #fff;
+}
+#board > #writeArticle > form.write input.title {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  border: 0;
+  color: #292929;
+  font-size: 16px;
+  font-weight: bold;
+}
+#board > #writeArticle > form.write textarea {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  border: 0;
+  color: #292929;
+  font-size: 16px;
+  font-weight: bold;
+}
+#board > #writeArticle > form.write input.large {
+  width: 100%;
+  border: 0;
+  color: #292929;
+  font-size: 16px;
+  font-weight: bold;
+  vertical-align: top;
+  /* position: absolute;
+  top: 50%; */
+}
+#board > #writeArticle > form.write textarea.large {
+  height: 350px;
+}
+#board > #writeArticle > form.write input.large {
+  height: 350px;
+}
+#board > #writeArticle > form.write .submit {
+  height: 30px;
+  width: 45px;
+  margin-top: 10px;
+  float: right;
+  color: white;
+  background-color: #c62917;
+  border: none;
+  background-image: url(http://0.0.0.0/static/images/pencil.png) no-repeat top left;
+}
+
