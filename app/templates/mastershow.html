@@ -1,45 +1,90 @@
 {% extends "articleLayout.html" %}
 
 {% block content %}
-    <div id="main">
-        <div id="board">
-            <div id="title" class="article">
-                <h1>
-                    <a href="/board/{{ board.url }}">{{ board.name }}</a>
-                </h1>
-            </div>
-            <div id="text" class="article">
-                <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
-                <div class="profile">
-                    <h3 class="large">{{ post.id }}</h3>
-                    <time class="large">비공개</time>
-                    {% if current_user.is_authenticated and current_user.id == post.user_id %}
-                        <a href="/board/{{ board.url }}/delete/{{ post.id }}">
-                            <p class="delete">삭제</p>
-                        </a>
-                        <a href="/board/{{ board.url }}/edit/{{ post.id }}">
-                            <p class="edit">수정</p>
-                        </a>
-                    {% endif %}
-                    <h2 class="large">{{ post.title }}</h2>
-                    <p id="post-text" class="large"></p>
-                </div>
-            </div>
-            <div id="comment" data-post-id="{{ post.id }}">
-                <form id="replyForm" action="/board/{{ board.url }}/{{ post.id }}/comment" method="post" class="writecomment">
-                    <input type="text" id="commentInput" name="text" placeholder="댓글을 입력하세요" class="commentblank">
-                    <input type="hidden" name="parent_id" value="{{ parent_comment.id if parent_comment else '' }}">
-                    <input type="submit" id="submit-btn" class="submit">
-                </form>
+<div id="main">
+    <div id="board">
+        <div id="title" class="article">
+            <h1>
+                <a href="/board/{{ board.url }}">{{ board.name }}</a>
+            </h1>
+        </div>
+        <div id="text" class="article">
+            <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
+            <div class="profile">
+                <h3 class="large">{{ post.id }}</h3>
+                <time class="large">비공개</time>
+                {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                    <a href="/board/{{ board.url }}/delete/{{ post.id }}">
+                        <p class="delete">삭제</p>
+                    </a>
+                    <a href="/board/{{ board.url }}/edit/{{ post.id }}">
+                        <p class="edit">수정</p>
+                    </a>
+                {% endif %}
+                <h2 class="large">{{ post.title }}</h2>
+                <p id="post-text" class="large"></p>
             </div>
         </div>
+        <div id="comment" data-post-id="{{ post.id }}" data-current-user-id="{{ current_user.id if current_user.is_authenticated else '' }}">
+            <form id="replyForm" action="/board/{{ board.url }}/{{ post.id }}/comment" method="post" class="writecomment">
+                <input type="text" id="commentInput" name="text" placeholder="댓글을 입력하세요" class="commentblank">
+                <input type="hidden" name="parent_id" value="{{ parent_comment.id if parent_comment else '' }}">
+                <input type="submit" id="submit-btn" class="submit">
+            </form>
+        </div>
     </div>
+</div>
+<!-- modal begin -->
+<div id="edit-modal-overlay" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="close-button">&times;</button>
+
+        <h2>댓글 수정 📝</h2>
+        <form id="edit-form">
+            <input type="hidden" id="edit-comment-id">
+
+            <div class="form-group">
+                <label for="edit-new-content">수정할 내용</label>
+                <textarea id="edit-new-content" rows="5" required></textarea>
+            </div>
+            <button type="submit">수정 완료</button>
+        </form>
+        <p id="modal-result-message"></p>
+    </div>
+</div>
+<!-- modal end -->
 {% endblock %}
 {% block script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
 <script type='text/javascript'>
     const textContent = "{{ post.text | safe }}";
     document.getElementById("post-text").innerHTML = DOMPurify.sanitize(textContent);
+</script>
+<script type='text/javascript'>
+    // ===== 모달 관련 요소 가져오기 =====
+    const modalOverlay = document.getElementById('edit-modal-overlay');
+    const editForm = document.getElementById('edit-form');
+    const hiddenCommentIdInput = document.getElementById('edit-comment-id');
+    const newContentInput = document.getElementById('edit-new-content');
+    const modalResultMessage = document.getElementById('modal-result-message');
+    const closeModalBtn = document.getElementById('modal-close-btn');
+
+    // --- 모달을 닫는 함수 ---
+    function hideEditModal() {
+        modalOverlay.classList.add('hidden');
+        modalResultMessage.textContent = ''; // 메시지 초기화
+    }
+
+    // --- 모달 닫기 이벤트 리스너 ---
+    // 1. 'X' 버튼 클릭 시
+    closeModalBtn.addEventListener('click', hideEditModal);
+
+    // 2. 모달 바깥의 어두운 영역 클릭 시
+    modalOverlay.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) {
+            hideEditModal();
+        }
+    });
 </script>
 <script src="{{ url_for('static', filename='js/comments.js') }}"></script>
 {% endblock %}

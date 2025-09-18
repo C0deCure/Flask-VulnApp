@@ -49,6 +49,7 @@ def get_comments(post_id):
             "created_at": comment.created_at,
             "updated_at": comment.updated_at,
             "user_name": comment.user.username,
+            "user_id": comment.user.id,
         })
 
     return jsonify(result)
