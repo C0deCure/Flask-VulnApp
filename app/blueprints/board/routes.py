@@ -108,7 +108,8 @@ def create_comment(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
-    form = CommentForm(meta={'csrf': False})
+    # form = CommentForm(meta={'csrf': False})
+    form = CommentForm()
     if form.validate_on_submit():
         parent = None
         if form.parent_id.data:

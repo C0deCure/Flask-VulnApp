@@ -472,7 +472,7 @@ li {
   background-size: 40px 40px;
   cursor: pointer;
   background-color: red;
-  background-image: url("/images/pencil.png");
+  background-image: url("/static/images/pencil.png");
 }
 #board > #comment > .parent {
   /* margin-top: 10px; */

@@ -1,4 +1,5 @@
 from flask import jsonify, request, current_app, Blueprint, abort
+from flask_login import current_user, login_required
 from app.models import Board, Post, Comment, User
 from app import db
 
@@ -56,10 +57,14 @@ def get_comments(post_id):
 
 # edit comment
 @api_bp.route("/comments/<int:comment_id>", methods=["PUT", "PATCH"])
+@login_required
 def update_comment(comment_id):
     comment = Comment.query.get(comment_id)
     if not comment:
         abort(404, description="Comment not found")
+
+    if comment.user_id != current_user.id:
+        abort(403, description="You are not authorized to perform this action.")
 
     data = request.get_json()
     new_content = data.get("text")
@@ -86,10 +91,14 @@ def update_comment(comment_id):
 # erase comment
 # TODO : login_required (coment CRUD)
 @api_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
+@login_required
 def delete_comment(comment_id):
     comment = Comment.query.get(comment_id)
     if not comment:
         abort(404, description="Comment not found")
+
+    if comment.user_id != current_user.id:
+        abort(403, description="You are not authorized to perform this action.")
 
     db.session.delete(comment)
     db.session.commit()
