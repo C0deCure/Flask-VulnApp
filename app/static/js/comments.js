@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // reply-btn
                     const replyBtn = document.createElement("button")
-                    replyBtn.classList.add("reply-btn");
+                    replyBtn.className = "reply-btn btn btn-sm btn-outline-primary";
                     replyBtn.textContent = "reply"
 
                     // profile image
@@ -41,25 +41,26 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (currentUserId && comment.user_id == currentUserId) {
                         // 삭제 버튼 (a 태그 대신 button 사용을 권장)
                         const deleteBtn = document.createElement("button");
-                        deleteBtn.className = "delete";
-                        deleteBtn.textContent = "삭제";
                         deleteBtn.onclick = () => handleDelete(comment.id);
+                        // Bootstrap 버튼 스타일 적용
+                        deleteBtn.className = "delete btn btn-sm btn-outline-primary ms-2";
+                        deleteBtn.textContent = "삭제";
 
-                    // 수정 버튼
-                    const editBtn = document.createElement("button");
-                    // Bootstrap 버튼 스타일 적용
-                    editBtn.className = "btn btn-sm btn-outline-primary ms-2"; // margin-left 추가
-                    editBtn.textContent = "수정";
+                        // 수정 버튼
+                        const editBtn = document.createElement("button");
+                        // Bootstrap 버튼 스타일 적용
+                        editBtn.className = "edit btn btn-sm btn-outline-primary ms-2"; // margin-left 추가
+                        editBtn.textContent = "수정";
 
-                    editBtn.onclick = () => {
-                        // 1. 폼에 현재 댓글 ID와 텍스트 채우기
-                        hiddenCommentIdInput.value = comment.id;
-                        newContentInput.value = comment.text;
-                        modalResultMessage.textContent = ''; // 이전 오류 메시지 초기화
+                        editBtn.onclick = () => {
+                            // 1. 폼에 현재 댓글 ID와 텍스트 채우기
+                            hiddenCommentIdInput.value = comment.id;
+                            newContentInput.value = comment.text;
+                            modalResultMessage.textContent = ''; // 이전 오류 메시지 초기화
 
-                        // 2. Bootstrap 모달 인스턴스를 통해 모달 보이기
-                        editModal.show();
-                    };
+                            // 2. Bootstrap 모달 인스턴스를 통해 모달 보이기
+                            editModal.show();
+                        };
 
                         // 생성된 버튼들을 댓글 div에 추가
                         parentDiv.appendChild(deleteBtn);
@@ -159,6 +160,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function updateVoteButtons(widget, userVote) {
+        const upvoteBtn = widget.querySelector('.upvote');
+        const downvoteBtn = widget.querySelector('.downvote');
+
+        // 모든 활성 클래스 초기화
+        upvoteBtn.classList.remove('active');
+        downvoteBtn.classList.remove('active');
+
+        if (userVote === 1) {
+            upvoteBtn.classList.add('active'); // 예: .active { color: orange; }
+        } else if (userVote === -1) {
+            downvoteBtn.classList.add('active'); // 예: .active { color: dodgerblue; }
+        }
+    }
+
     submitBtn.addEventListener("click", () => {
         const text = textInput.value.trim();
 
@@ -167,7 +183,50 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        addComment(text);
+        // addComment(text);
+    });
+
+    document.querySelectorAll('.vote-widget').forEach(widget => {
+        widget.addEventListener('click', async (event) => {
+            // vote-btn 클래스를 가진 버튼이 클릭되었을 때만 실행
+            if (!event.target.classList.contains('vote-btn')) {
+                return;
+            }
+
+            const postId = widget.dataset.postId;
+            const value = parseInt(event.target.dataset.value, 10);
+
+            try {
+                const response = await fetch(`/api/v1/posts/${postId}/vote`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // CSRF 토큰 헤더가 필요하다면 여기에 추가
+                    },
+                    body: JSON.stringify({ value: value })
+                });
+
+                if (!response.ok) {
+                    // 로그인하지 않았거나 다른 에러 발생 시
+                    const errorData = await response.json();
+                    alert(errorData.description || '투표에 실패했습니다.');
+                    return;
+                }
+
+                const data = await response.json();
+
+                // API 응답 값으로 화면의 총 투표 수와 버튼 상태를 업데이트
+                const totalVotesSpan = widget.querySelector('.total-votes');
+                totalVotesSpan.textContent = data.total_votes;
+
+                // (심화) 사용자의 투표 상태에 따라 버튼 색상을 변경하는 로직 추가
+                updateVoteButtons(widget, data.user_vote);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('네트워크 오류가 발생했습니다.');
+            }
+        });
     });
 
     // ===== 모달의 '수정 완료' 버튼 로직 수정 =====
@@ -208,3 +267,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadComments();
 });
+

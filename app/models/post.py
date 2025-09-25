@@ -1,14 +1,19 @@
 from .. import db
 from datetime import datetime
+from sqlalchemy import UniqueConstraint
 
 # Post_MAX_Title =
 # Post_MAX_DESCRIPTION =
 
-post_upvotes = db.Table(
-    'post_upvotes',
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-)
+
+class PostVotes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False)
+    value = db.Column(db.Integer, nullable=False)  # 1 for upvote, -1 for downvote
+
+    # 한 사용자는 한 게시물에 한 번만 투표할 수 있도록 복합 유니크 제약조건 설정
+    __table_args__ = (UniqueConstraint('user_id', 'post_id', name='_user_post_uc'),)
 
 comment_upvotes = db.Table(
     'comment_upvotes',
@@ -22,7 +27,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    # votes = db.Column(db.Integer, default=0)
+    post_votes = db.relationship('PostVotes', backref='post', lazy=True, cascade="all, delete-orphan")
 
     # thumbnail
 
@@ -34,6 +39,11 @@ class Post(db.Model):
 
     # board = db.relationship('Board', backref=db.backref('posts', lazy='dynamic'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    user = db.relationship('User', backref='post')
+
+    @property
+    def total_votes(self):
+        return sum(vote.value for vote in self.post_votes)
 
 class Comment(db.Model):
     """<UNK> <UNK> <UNK>"""

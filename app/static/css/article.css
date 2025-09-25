@@ -638,3 +638,54 @@ li {
   background-image: url(http://0.0.0.0/static/images/pencil.png) no-repeat top left;
 }
 
+/* vote css */
+.vote-btn {
+    border-radius: 50%; /* 버튼을 원형으로 */
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 활성화 상태일 때 (추천 눌렀을 때) */
+.vote-btn.active .fa-regular {
+    /* 기존 아이콘은 숨김 */
+    display: none;
+}
+.vote-btn.upvote.active::before {
+    /* Font Awesome의 아이콘을 가상요소로 표시 */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900; /* 400 empty, 900 solid */
+    content: "\f164"; /* '따봉' 아이콘의 유니코드 */
+    color: #ff0000; /* 부트스트랩 Primary 색상 */
+}
+.vote-btn.downvote.active::before {
+    /* Font Awesome의 아이콘을 가상요소로 표시 */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900; /* 400 empty, 900 solid */
+    content: "\f165"; /* '따봉' 아이콘의 유니코드 */
+    color: #0000ff; /* 부트스트랩 Primary 색상 */
+}
+/* 추천 버튼 활성화 스타일 */
+.vote-btn.upvote.active {
+    background-color: #ffff00;
+    /*border-color: #dd66ee;*/
+    color: white;
+}
+
+/* 비추천 버튼 활성화 스타일 */
+.vote-btn.downvote.active {
+    background-color: #555555;
+    border-color: #0d6efd;
+    color: white;
+}
+
+/* 아이콘이 버튼보다 커서 클릭 안되는 현상 방지 */
+.vote-btn i {
+    pointer-events: none;
+}
+
+.vote-btn:hover {
+    background-color: #e9ecef;

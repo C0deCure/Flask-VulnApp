@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, Blueprint, abort
 from flask_login import current_user, login_required
-from app.models import Board, Post, Comment, User
+from app.models import Board, Post, Comment, User, PostVotes
 from app import db
 
 # Blueprint 생성
@@ -104,3 +104,38 @@ def delete_comment(comment_id):
     db.session.commit()
 
     return jsonify({"message": "Comment deleted"})
+
+@api_bp.route("/posts/<int:post_id>/vote", methods=["POST"])
+@login_required
+def vote_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    data = request.get_json()
+    new_value = data.get('value') # 클라이언트가 보낸 값 (1 또는 -1)
+
+    if new_value not in [1, -1]:
+        return jsonify({"error": "Invalid vote value."}), 400
+
+    # 현재 사용자가 이 게시물에 이미 투표했는지 확인
+    existing_vote = PostVotes.query.filter_by(user_id=current_user.id, post_id=post.id).first()
+
+    if existing_vote:
+        # 이미 같은 투표를 했다면 (예: 추천을 또 누름) -> 투표 취소
+        if existing_vote.value == new_value:
+            db.session.delete(existing_vote)
+        # 다른 투표를 했다면 (예: 비추천 -> 추천) -> 투표 변경
+        else:
+            existing_vote.value = new_value
+    else:
+        # 첫 투표라면 -> 새로운 투표 기록 생성
+        new_vote = PostVotes(user_id=current_user.id, post_id=post.id, value=new_value)
+        db.session.add(new_vote)
+
+    db.session.commit()
+
+    # 프론트엔드에서 UI를 업데이트할 수 있도록 최신 정보를 반환
+    user_vote_value = PostVotes.query.filter_by(user_id=current_user.id, post_id=post.id).first()
+    return jsonify({
+        "message": "Vote processed successfully.",
+        "total_votes": post.total_votes,
+        "user_vote": user_vote_value.value if user_vote_value else 0 # 사용자의 현재 투표 상태 (없으면 0)
+    })
