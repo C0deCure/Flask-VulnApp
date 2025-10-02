@@ -48,9 +48,10 @@ def register():
         user_id = request.form.get('userid')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
+        major = request.form.get('major')
         
-        if not user_id or not password:
-            flash('아이디와 비밀번호를 모두 입력해주세요.', 'error')
+        if not user_id or not password or not major:
+            flash('아이디, 비밀번호, 학과를 모두 입력해주세요.', 'error')
             return render_template('register.html', title='회원가입')
         
         if password != confirm_password:
@@ -61,7 +62,7 @@ def register():
             flash('이미 존재하는 아이디입니다.', 'error')
             return render_template('register.html', title='회원가입')
         
-        user = User(id=user_id)
+        user = User(id=user_id, major=major)
         user.set_password(password)
         user.save()
         

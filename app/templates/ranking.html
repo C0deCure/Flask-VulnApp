@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="main">
+    <div id="board">
+        <div class="card">
+            <div class="article">
+                <h2>🏆 학과별 랭킹</h2>
+                <p class="ranking-description">
+                    학과별 가입자 수에 따른 포인트 랭킹입니다.<br>
+                    <strong>1명당 1000포인트</strong>로 계산됩니다.
+                </p>
+                
+                {% if rankings %}
+                    <div class="ranking-container">
+                        {% for ranking in rankings %}
+                        <div class="ranking-item {% if ranking.rank == 1 %}gold{% elif ranking.rank == 2 %}silver{% elif ranking.rank == 3 %}bronze{% endif %}">
+                            <div class="rank-number">
+                                {% if ranking.rank == 1 %}
+                                    🥇
+                                {% elif ranking.rank == 2 %}
+                                    🥈
+                                {% elif ranking.rank == 3 %}
+                                    🥉
+                                {% else %}
+                                    {{ ranking.rank }}위
+                                {% endif %}
+                            </div>
+                            <div class="rank-info">
+                                <div class="major-name">{{ ranking.major }}</div>
+                                <div class="rank-details">
+                                    <span class="student-count">{{ ranking.student_count }}명</span>
+                                    <span class="points">{{ ranking.points|format_number }}포인트</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-data">
+                        <p>아직 랭킹 데이터가 없습니다.</p>
+                        <p>학생들이 회원가입하면 랭킹이 표시됩니다.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.ranking-description {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.ranking-container {
+    margin-top: 20px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.ranking-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.ranking-item.gold {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    border-color: #ffd700;
+}
+
+.ranking-item.silver {
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    border-color: #c0c0c0;
+}
+
+.ranking-item.bronze {
+    background: linear-gradient(135deg, #cd7f32, #daa520);
+    border-color: #cd7f32;
+    color: white;
+}
+
+.rank-number {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 20px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.rank-info {
+    flex: 1;
+}
+
+.major-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.ranking-item.bronze .major-name {
+    color: white;
+}
+
+.rank-details {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.student-count {
+    color: #666;
+    font-weight: 500;
+}
+
+.points {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.ranking-item.bronze .points {
+    color: #fff;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.no-data p {
+    margin: 10px 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .ranking-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .rank-number {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .rank-details {
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}

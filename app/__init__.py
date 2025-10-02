@@ -15,7 +15,14 @@ JWT_EXPIRATION_HOURS = 24
 
 def get_db():
     """데이터베이스 연결"""
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'app.db')
+    # instance 디렉토리 경로 생성
+    instance_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance')
+    
+    # instance 디렉토리가 없으면 생성
+    if not os.path.exists(instance_dir):
+        os.makedirs(instance_dir)
+    
+    db_path = os.path.join(instance_dir, 'app.db')
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
@@ -30,6 +37,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS user (
                 id TEXT PRIMARY KEY,
                 password TEXT NOT NULL,
+                major TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -167,10 +175,11 @@ def create_app(config_name='default'):
         app.config.from_object('app.config.Config')
     
     # 템플릿 필터 등록
-    from app.utils.helpers import nl2br, format_datetime, truncate_text
+    from app.utils.helpers import nl2br, format_datetime, truncate_text, format_number
     app.jinja_env.filters['nl2br'] = nl2br
     app.jinja_env.filters['format_datetime'] = format_datetime
     app.jinja_env.filters['truncate_text'] = truncate_text
+    app.jinja_env.filters['format_number'] = format_number
     
     # 전역 템플릿 변수 등록
     @app.context_processor
@@ -182,10 +191,12 @@ def create_app(config_name='default'):
     from app.blueprints.main import main_bp
     from app.blueprints.auth import auth_bp
     from app.blueprints.api import api_bp
+    from app.blueprints.ranking import ranking_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(api_bp, url_prefix='/api')
+    app.register_blueprint(ranking_bp)
     
     # 데이터베이스 초기화
     with app.app_context():

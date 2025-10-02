@@ -16,4 +16,8 @@ def truncate_text(text, length=100):
     """텍스트 자르기"""
     if len(text) <= length:
         return text
-    return text[:length] + '...' 
+    return text[:length] + '...'
+
+def format_number(number):
+    """숫자 포맷팅 (천 단위 콤마)"""
+    return f"{number:,}" 

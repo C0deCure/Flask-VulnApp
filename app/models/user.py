@@ -4,9 +4,10 @@ from app import get_db
 class User:
     """사용자 모델"""
     
-    def __init__(self, id, password=None, created_at=None):
+    def __init__(self, id, password=None, major=None, created_at=None):
         self.id = id
         self.password = password
+        self.major = major
         self.created_at = created_at
     
     @staticmethod
@@ -20,6 +21,7 @@ class User:
                 return User(
                     id=row['id'],
                     password=row['password'],
+                    major=row['major'],
                     created_at=row['created_at']
                 )
         return None
@@ -37,8 +39,8 @@ class User:
         with get_db() as db:
             cursor = db.cursor()
             cursor.execute(
-                "INSERT OR REPLACE INTO user (id, password) VALUES (?, ?)",
-                (self.id, self.password)
+                "INSERT OR REPLACE INTO user (id, password, major) VALUES (?, ?, ?)",
+                (self.id, self.password, self.major)
             )
             db.commit()
     
