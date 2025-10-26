@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커뮤니티 이용규칙</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    <style>
+        body { background-color: #ffffff; }
+        .content-card {
+            border-radius: 0.75rem;
+            border: 1px solid #e9ecef;
+            max-width: 700px;
+            margin: auto;
+        }
+        .card-body {
+            text-align: left;
+        }
+        .card-body h2 { font-size: 1.8rem; font-weight: bold; margin-bottom: 1.5rem; }
+        .card-body h3 { font-size: 1.5rem; font-weight: bold; margin-top: 2.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; }        .card-body h4 { font-size: 1.2rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
+        .card-body p, .card-body li { 
+            color: #495057; 
+            line-height: 1.8; 
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <nav id="header">
+        <div class="wrap">
+            <div id="logo">
+                <a href="{{ url_for('main.index') }}"><img id="img" src="{{ url_for('static', filename='images/logo.png') }}"></a>
+                <p><span class="schoolname">SMULife</span></p>
+            </div>
+            <div id="account" style="display: flex; align-items: center;">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('message.room_list') }}" title="쪽지함" style="margin-right: 10px; border: none; background: none; padding: 0;"><img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함"></a>
+                    <a href="{{ url_for('mypage.profile') }}" title="마이페이지" style="margin-right: 15px; border: none; background: none; padding: 0;"><img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지"></a>
+                    <span style="margin-right: 10px;">{{ current_user.username }} 님 안녕하세요</span>
+                    <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+                {% endif %}
+            </div>
+            <div id="menu">
+                <ul> 
+                    <li><a href="#">게시판</a></li> 
+                    <li><a href="#">시간표</a></li> 
+                    <li><a href="#">강의평가</a></li> 
+                    <li><a href="#">학점계산기</a></li> 
+                    <li><a href="#">친구</a></li> 
+                    <li><a href="#">책방</a></li> 
+                    <li><a href="#">캠퍼스픽</a></li> 
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="card shadow-sm content-card">
+            <div class="card-body p-4 p-md-5">
+                
+                <h3>커뮤니티 이용규칙</h3>
+                
+                <p>커뮤니티 이용규칙은 누구나 기분 좋게 참여할 수 있는 커뮤니티를 만들기 위해 제정되었습니다. 서비스 내 모든 커뮤니티는 커뮤니티 이용규칙에 의해 운영되므로, 이용자는 커뮤니티 이용 전 반드시 모든 내용을 숙지하여야 합니다.</p>
+                <p>방송통신심의위원회의 정보통신에 관한 심의규정, 현행 법률, 서비스 이용약관 및 커뮤니티 이용규칙을 위반하거나, 사회 통념 및 관련 법령을 기준으로 타 이용자에게 악영향을 끼치는 경우, 게시물이 삭제되고 서비스 이용이 일정 기간 제한될 수 있습니다.</p>
+                <p>커뮤니티 이용규칙은 불법 행위, 각종 차별 및 혐오, 사회적 갈등 조장, 타인의 권리 침해, 다른 이용자에게 불쾌감을 주는 행위, 커뮤니티 유출 행위, 시스템 장애를 유발하는 비정상 행위 등 커뮤니티 분위기 형성과 운영에 악영향을 미치는 행위들을 제한하기 위해 지속적으로 개정됩니다. 중대한 변경 사항이 있는 경우에는 공지사항을 통해 고지하므로 반드시 확인해주시기 바랍니다.</p>
+
+                <h3>커뮤니티 운영 시스템</h3>
+                <p>커뮤니티 운영 시스템은 서비스 이용약관 및 커뮤니티 이용규칙 위반을 빠르게 감지하고 조치하기 위해 도입되었습니다. 또한 현행 법률에 따른 청소년유해매체물, 권리 침해, 비정상적인 이용 등의 규칙 위반 행위에 대해 선제적으로 필터링하여 대응할 수 있도록, AI를 기반으로 시스템을 지속적으로 발전시키고 있습니다. 방송통신심의위원회의 정보통신에 관한 심의규정, 현행 법률, 서비스 이용약관 및 커뮤니티 이용규칙 위반이 확인될 경우, 게시물이 삭제되고 서비스 이용이 일정 기한 제한됩니다. 위반 횟수가 누적될수록 이용 제한 기한 및 수준이 증가할 수 있습니다.</p>
+                <p>단, 생명 경시 행위, 가족 및 고인 모독 행위, 성적 도의관념에 반하는 행위, 비정상적 서비스 이용과 같이 중대한 커뮤니티 이용규칙 및 현행 법률 위반 행위가 적발될 경우 즉시 1년 이상 서비스 이용이 제한됩니다. 또한 노출 및 음란물 게시 행위, 범죄 및 불법 행위, 계정 판매 및 대리 게시 행위, 홍보/판매 행위와 같이 서비스 이용약관 제12조 및 심각한 현행 법률 위반 행위가 적발될 경우, 서비스 보호 및 안정적인 커뮤니티 운영을 위해 서비스 이용약관 13조에 따라 5년 이상 서비스 이용이 제한되거나, 영구적으로 서비스 이용계약이 해지되며 더 이상 서비스를 이용하실 수 없습니다.</p>
+                <p>이용 제한 시, 관련한 내용이 서비스 내부 알림 수단을 통해 개별 통지되며, 제한 기한, 적용 범위, 근거 게시물 등 상세 내용을 [내 정보]에서 확인하실 수 있습니다. 또한 개인정보 처리방침에 따른 기간 동안 관련 개인정보 및 로그가 수집되어 파기되지 않고 보존됩니다.</p>
+                <p>서비스 이용 중 서비스 이용 약관 및 커뮤니티 이용규칙에 어긋난다고 판단되는 게시물 작성, 채팅방 메시지 작성, 1:1 대화 발송, 게시판 개설, 채팅방 개설, 닉네임 및 프로필 사진 지정, 악용 행위를 발견하셨을 경우, 원활하고 신속한 처리를 위해 해당 게시물의 신고 버튼을 눌러 신고해주시기 바랍니다. 신고 시 게시물 처리 및 시스템 운영을 위해 최소한의 로그가 수집 및 보관되며, 1:1 대화에 대한 신고가 접수된 경우에는 추가적으로 대화 내용 일부가 일시적으로 저장될 수 있습니다.</p>
+                
+                <h3>유출 방지 시스템</h3>
+                <p>유출 방지 시스템은 게시물 및 자료를 외부로 유출하는 행위를 실시간으로 감지하고 조치하기 위해 도입되었습니다. 커뮤니티의 게시물을 복사·스크린샷·촬영하여 외부 사이트·대화방에 게시하거나, 타인에게 관련한 내용을 공유하거나, 게시판·시간표·강의평가를 크롤링하는 등 게시물 및 자료 유출이 적발될 경우, 서비스 이용약관 13조에 따라 5년 이상 서비스 이용이 제한되거나, 영구적으로 서비스 이용계약이 해지되며 더 이상 서비스를 이용하실 수 없습니다. 만약 외부 유출을 발견하셨을 경우, [게시물 유출 신고]를 통해 신고해주시기 바랍니다. 모든 이용자는 외부 유출 행위로 인해 발생한 모든 피해에 대해 민형사상 책임과 손해를 배상할 책임이 있습니다.</p>
+
+                <h3>금지 행위</h3>
+                <p>이용자 보호 및 원활한 서비스 제공을 위해 다음에 해당하는 게시물 작성, 채팅방 메시지 작성, 1:1 대화 발송, 게시판 개설, 채팅방 개설, 닉네임 및 프로필 사진 지정, 악용 행위를 금지하고 있습니다. 본 커뮤니티 이용규칙은 방송통신심의위원회의 정보통신에 관한 심의규정에 따른 심의기준을 기반으로 합니다.</p>
+
+                <h4>일반 금지 행위</h4>
+                    <li>1. 국제 평화, 국제 질서 및 국가 간의 우의를 현저히 해할 우려가 있는 행위</li>
+                    <li>2. 헌법에 위배되거나 국가의 존립을 해하는 행위</li>
+                    <li>3. 범죄 기타 법령에 위반되는 행위</li>
+                    <li>4. 사회통념상 일반인의 성욕을 자극하여 성적 흥분을 유발하고 정상적인 성적 수치심을 해하여 성적 도의관념에 반하는 행위</li>
+                    <li>5. 폭력성·잔혹성·혐오성 등이 심각한 행위</li>
+                    <li>6. 사회통합 및 사회질서를 저해하는 행위</li>
+                    <li>7. 타인의 권리를 침해하는 행위</li>
+                    <li>8. 자살예방법에 반하는 자살 및 자해 유발정보 유통 행위</li>
+                    <li>9. 의료법·약사법·관세법·전파법·외국환거래법 등 법률에 반하는 거래 불가능 품목 거래 행위</li>
+                    <li>10. 악용/오용 행위</li>
+                    <li>11. 비정상적 시스템 이용 행위</li>
+
+                <h4>정치·사회 관련 금지 행위</h4>
+                <p>1. 시사·이슈 게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 언론·시민단체 등 관련 단체 옹호, 추천, 반대, 비하 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 특정 정당·후보에 대한 지지, 비방, 투표 독려 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 다른 이용자를 특정 정치 단체 관련자 및 특정 이념 옹호자로 몰아가는 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 다양한 의견을 배척하고 여론을 하나로 수렴하는 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 다른 이용자나 게시물에 대한 욕설, 비난, 비꼬는 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 기타 정치·사회 관련 갈등을 조장할 수 있는 행위 일체<br>2. 시사·이슈 외 게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 국가기관(정부·공무원), 정치 관련 단체(정치인·정당·시민단체), 언론, 시민단체에 대한 언급 혹은 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp이와 관련한 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 정책·외교 또는 정치·정파에 대한 의견, 주장 및 이념, 가치관을 드러내는 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 성별, 종교, 인종, 출신, 지역, 직업, 이념 등 사회적 이슈에 대한 언급 혹은 이와 관련한 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 위와 같은 내용으로 유추될 수 있는 비유, 은어 사용 행위</p>
+
+                <h4>홍보 및 판매 관련 금지 행위</h4>
+                <p>1. 홍보게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 커뮤니티 이용규칙이 적용되는 서비스 및 기능과 동일하거나 유사한 서비스 및 기능에 대한&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 직·간접적 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 바이럴을 목적으로 대외활동, 대리 게시 요청, 계정 공유 등을 통해 여러 학교에 다발적으로 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp게시되는 동일한 주제에 대한 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 신용카드, 보험, 의료 광고<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 성인, 도박, 베팅 사이트 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 계정 판매/공유/양도<br>2. 동아리·학회 게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 외부 단체·법인·기관·사업체에서 운영하거나 소속된 동아리 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 기관·정치인·정당·종교·시민단체와 직간접적으로 연관되거나, 관련한 활동을 하는 동아리 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 대학생이 아닌 회원을 모집하는 동아리 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 인력 모집을 위한 구인·구직 목적의 동아리 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 만남·소개팅 형식의 동아리 홍보<br>3. 책방, 장터 게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 비상업적 목적의 일상 생활과 관련된 중고 품목 이외의 품목 판매 행위<br>4. 그 외 게시판 금지 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 공모전, 대외활동, 채용, 서포터즈, 이벤트, 아카데미, 공연, 영화 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 교육, 의료, 식당, 부동산, 배달, 공유 사업 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 애플리케이션, 웹사이트, SNS, 블로그, 카페, 스토어, 서비스 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 채팅, 사진 교환, 동호회, 소개팅, 만남, 주선 홍보<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 구독, 좋아요, 학우 참여, 모집, 링크 클릭, 추천인 입력, 앱 설치, 설문조사, 회원가입 요청<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 서비스 및 재화 판매, 공동구매, 펀딩, 후원, 모금, 기부금품 요청<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 계정 공유 및 판매 요청, 홍보·소개 요청, 바이럴 이벤트 등 게시물 대리 작성<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 그 밖에 영리 여부와 관계없이 사업체·기관·단체·개인에게 직간접적으로 영향을 줄 수 있는 게시물 작성 행위<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 위와 관련된 것으로 의심되거나 예상될 수 있는 바이럴 홍보 및 명칭·단어 언급 행위</p>
+
+                <h3>게시물 작성·수정·삭제 규칙</h3>
+                <p>1. 게시물 작성<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   • 홍보게시판과 동아리·학회 게시판 중 어느 한 곳에 글을 작성했을 경우, 두 게시판 모두 3일 동안 글을 작성할 수 없습니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  • 그 외 게시판은 게시판 별로 5분에 최대 세 번만 작성할 수 있습니다.<br>2. 게시물 수정 및 삭제<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 홍보게시판과 동아리·학회 게시판은 글 작성 후 60분이 지나면, 3일간 작성한 글을 수정하거나 삭제할 수 없습니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 질문 글, 강의평, 시험정보, 책방, 대학백과 답변 및 후기는 작성 시 안내에 따라 게시 이후 삭제할 수 없습니다.<br>3. HOT 게시물 선정<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 공감 10개를 받으면 자동으로 선정됩니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 시사·이슈 게시판, 장터게시판, 동아리·학회 게시판, 홍보게시판은 선정되지 않습니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 게시판 관리자가 HOT 게시판 선정 옵션을 끄거나, 이용량이 적어 휴면 상태로 분류된 게시판은 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp공감 10개를 받더라도 선정되지 않습니다.<br>4. BEST 게시물 선정<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 공감 100개를 받으면 자동으로 선정됩니다.</p>
+
+                <h3>게시판 관리자 제도</h3>
+                <p>1. 게시판 관리자는 자신이 관리중인 게시판에 올라오는 게시물을 공지로 지정하거나 삭제, 이용제한할 수 있습니다.<br>2. 게시판 관리자는 에브리타임 계정을 탈퇴할 수 없습니다. 탈퇴를 위해서는 자신이 관리중인 게시판을 삭제하거나 다른 회원에게 관리자 권한을 양도해야 합니다. 단, 게시판 개설 혹은 마지막 게시물 게시 이후, 14일 동안 활동이 없는 게시판만 삭제할 수 있습니다.<br>3. 다음에 해당하는 경우, 게시판이 숨겨지거나, 폐쇄되거나, 게시판 관리자 권한이 박탈될 수 있습니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 커뮤니티 이용규칙에 어긋나는 주제의 게시판을 생성했을 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 게시판 관리자가 커뮤니티 이용규칙을 어길 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 커뮤니티 이용규칙에 어긋나는 게시물이 삭제되지 않을 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 게시판에 14일 이상 게시물이 올라오지 않을 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 게시판 관리자가 존재하지 않을 경우</p>
+
+                <h3>채팅방 관리자 제도</h3>
+                <p>1. 채팅방 관리자는 자신이 관리중인 채팅방에 참가한 참여자의 메시지를 회수할 수 있습니다.<br>2. 채팅방 관리자는 자신이 관리중인 채팅방에 참가한 참여자를 채팅방에서 내보낼 수 있습니다.<br>3. 채팅방 관리자는 자신이 관리중인 채팅방에 참가한 참여자에게 채팅방 관리자 권한을 양도할 수 있습니다.<br>4. 채팅방 관리자는 채팅방의 다른 참여자들을 차단할 수 없습니다. 채팅방 참여자가 관리자 권한을 양도받을 경우, 기존에 차단한 이용자가 있다면 권한을 넘겨받는 순간 모든 차단이 해제됩니다.<br>5. 채팅방 관리자가 자신이 관리중인 채팅방에서 관리자 권한을 양도하지 않고 에브리타임을 탈퇴하거나 채팅방을 나갈 경우, 채팅방 참여 일시가 가장 빠른 참여자에게 관리자 권한이 자동으로 양도됩니다.<br>6. 다음에 해당하는 경우, 채팅방이 폐쇄될 수 있습니다.<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 커뮤니티 이용규칙에 어긋나는 주제의 채팅방을 생성했을 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 채팅방 관리자가 커뮤니티 이용규칙을 어길 경우<br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp• 커뮤니티 이용규칙에 어긋나는 메시지가 회수되지 않을 경우</p>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
