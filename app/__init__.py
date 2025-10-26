@@ -12,6 +12,11 @@ def create_app(config_name='default'):
     # SQLAlchemy 설정 추가
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'app.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
     # db 객체를 Flask 앱과 연결(초기화)
     db.init_app(app)
@@ -38,10 +43,12 @@ def create_app(config_name='default'):
     from .blueprints.auth import auth_bp
     from .blueprints.api import api_bp
     from .blueprints.message import message_bp
+    from app.blueprints.mypage import mypage_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(api_bp, url_prefix='/api')
-    app.register_blueprint(message_bp)
+    app.register_blueprint(message_bp, url_prefix='/message')
+    app.register_blueprint(mypage_bp, url_prefix='/mypage')
     
     return app
