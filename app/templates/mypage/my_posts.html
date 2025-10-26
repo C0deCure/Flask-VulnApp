@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+        .card {
+            border-radius: 0.75rem;
+            border: 1px solid #e9ecef;
+            margin-bottom: 1rem; 
+            max-width: 650px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .list-group-item {
+            border: none;
+            padding: 0.85rem 1.25rem;
+        }
+        .list-group-item-action {
+            color: #212529;
+            font-size: 1.05rem;
+        }
+        .list-group-item-action:hover {
+            background-color: #f1f3f5;
+        }
+        /* ▼▼▼ 페이지 제목과 게시판 제목 스타일 ▼▼▼ */
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .board-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        .list-group-item p.mb-1 {
+            font-size: 1rem; /* 제목 글씨 크기 (기존 0.8rem 근처에서 확대) */
+        }
+        .list-group-item small {
+            font-size: 0.9rem; /* 날짜 글씨 크기 (기존 0.7rem 근처에서 확대) */
+        }
+    </style>
+</head>
+<body>
+    <nav id="header">
+        <div class="wrap">
+            <div id="logo">
+                <a href="{{ url_for('main.index') }}"><img id="img" src="{{ url_for('static', filename='images/logo.png') }}"></a>
+                <p><span class="schoolname">SMULife</span></p>
+            </div>
+            <div id="account" style="display: flex; align-items: center;">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('message.room_list') }}" title="쪽지함" style="margin-right: 10px; border: none; background: none; padding: 0;"><img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함"></a>
+                    <a href="{{ url_for('mypage.profile') }}" title="마이페이지" style="margin-right: 15px; border: none; background: none; padding: 0;"><img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지"></a>
+                    <span style="margin-right: 10px;">{{ current_user.username }} 님 안녕하세요</span>
+                    <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+                {% endif %}
+            </div>
+            <div id="menu">
+                 <ul> 
+                     <li><a href="#">게시판</a></li> 
+                     <li><a href="#">시간표</a></li> 
+                     <li><a href="#">강의평가</a></li> 
+                     <li><a href="#">학점계산기</a></li> 
+                     <li><a href="#">친구</a></li> 
+                     <li><a href="#">책방</a></li> 
+                     <li><a href="#">캠퍼스픽</a></li> 
+                 </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                
+                <!-- ▼▼▼ 1. [수정] h2 태그에 class="page-title"을 추가했습니다. ▼▼▼ -->
+                <h2 class="page-title text-center mb-5">게시판 관리</h2>
+                
+                {% if posts_by_board %}
+                    {% for board_type, posts in posts_by_board.items() %}
+                        <div class="board-section">
+                            
+                            <!-- ▼▼▼ 2. [수정] h4 태그에 class="board-title"을 추가하고, 한글 이름을 표시하도록 변경했습니다. ▼▼▼ -->
+                            <h4 class="board-title">{{ board_names.get(board_type, board_type|capitalize) }}</h4>
+                            
+                            <ul class="list-group list-group-flush">
+                                {% for post in posts %}
+                                    {% set num_attr = board_type[0] ~ '_num' %}
+                                    {% set title_attr = board_type[0] ~ '_title' %}
+                                    {% set date_attr = board_type[0] ~ '_date' %}
+                                    
+                                    <a href="{{ url_for('main.board_show', board_type=board_type, post_id=post[num_attr]) }}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <p class="mb-1 text-truncate">{{ post[title_attr] }}</p>
+                                            <small class="text-nowrap text-muted">{{ post[date_attr].strftime('%Y-%m-%d') }}</small>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted mt-5">작성한 게시글이 없습니다.</p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
