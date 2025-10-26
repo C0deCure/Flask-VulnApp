@@ -23,12 +23,12 @@
                             <img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함" style="vertical-align: middle;">
                         </a>
                         
-                        <a href="#" title="마이페이지" 
+                        <a href="{{ url_for('mypage.profile') }}" title="마이페이지" 
                         style="margin-right: 15px; border: none; background: none; padding: 0;">
                             <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
                         </a>
                         
-                        <span style="margin-right: 10px;">{{ current_user.id }} 님 안녕하세요</span>
+                        <span style="margin-right: 10px;">{{ current_user.username }} 님 안녕하세요</span>
                         <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
 
                     {% else %}
@@ -123,7 +123,7 @@
                             {% if current_user.is_authenticated %}
                                 <h3>안녕하세요!
                                     <br>
-                                    <strong>{{ current_user.id }} 님 반갑습니다!</strong>
+                                    <strong>{{ current_user.username }} 님 반갑습니다!</strong>
                                 </h3>
                                 <a href="{{ url_for('auth.logout') }}" class="button register">로그아웃</a>
                             {% else %}
