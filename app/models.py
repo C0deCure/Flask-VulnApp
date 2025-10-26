@@ -5,7 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'user'
-    id = db.Column(db.String(80), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
@@ -61,72 +62,72 @@ class Note(db.Model):
 class Free(db.Model):
     __tablename__ = 'free'
     f_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     f_title = db.Column(db.Text, nullable=False)
     f_txt = db.Column(db.Text, nullable=False)
     f_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='free_posts')
 
 class Secret(db.Model):
     __tablename__ = 'secret'
     s_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     s_title = db.Column(db.Text, nullable=False)
     s_txt = db.Column(db.Text, nullable=False)
     s_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='secret_posts')
 
 # (Grad, Market, New, Info, Prom, Team 모델도 위와 같은 패턴으로 정의)
 class Grad(db.Model):
     __tablename__ = 'grad'
     g_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     g_title = db.Column(db.Text, nullable=False)
     g_txt = db.Column(db.Text, nullable=False)
     g_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='grad_posts')
     
 class Market(db.Model):
     __tablename__ = 'market'
     m_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     m_title = db.Column(db.Text, nullable=False)
     m_txt = db.Column(db.Text, nullable=False)
     m_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='market_posts')
     
 class New(db.Model):
     __tablename__ = 'new'
     n_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     n_title = db.Column(db.Text, nullable=False)
     n_txt = db.Column(db.Text, nullable=False)
     n_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='new_posts')
     
 class Info(db.Model):
     __tablename__ = 'info'
     i_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     i_title = db.Column(db.Text, nullable=False)
     i_txt = db.Column(db.Text, nullable=False)
     i_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='info_posts')
     
 class Prom(db.Model):
     __tablename__ = 'prom'
     p_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     p_title = db.Column(db.Text, nullable=False)
     p_txt = db.Column(db.Text, nullable=False)
     p_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='prom_posts')
     
 class Team(db.Model):
     __tablename__ = 'team'
     t_num = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.String(80), db.ForeignKey('user.id'), server_default='익명')
     t_title = db.Column(db.Text, nullable=False)
     t_txt = db.Column(db.Text, nullable=False)
     t_date = db.Column(db.DateTime, server_default=db.func.current_timestamp())
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', backref='team_posts')
