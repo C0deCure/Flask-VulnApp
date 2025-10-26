@@ -48,11 +48,11 @@
                         style="margin-right: 10px; border: none; background: none; padding: 0;">
                             <img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함" style="vertical-align: middle;">
                     </a>
-                    <a href="#" title="마이페이지" 
-                        style="margin-right: 15px; border: none; background: none; padding: 0;">
-                            <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
+                    <a href="{{ url_for('mypage.profile') }}" title="마이페이지" 
+                    style="margin-right: 15px; border: none; background: none; padding: 0;">
+                        <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
                     </a>
-                    <span style="margin-right: 10px;">{{ current_user.id }} 님 안녕하세요</span>
+                    <span style="margin-right: 10px;">{{ current_user.username }} 님 안녕하세요</span>
                     <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
                 {% endif %}
             </div>
@@ -80,7 +80,7 @@
                             {% for room in rooms %}
                                 <a href="{{ url_for('message.room_detail', room_id=room.room_id) }}" class="list-group-item list-group-item-action py-3">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <strong class="mb-1">{{ room.other_user_id }}</strong>
+                                        <strong class="mb-1">{{ room.other_user_username }}</strong>
                                         <small class="text-muted">{{ room.last_date.strftime('%m/%d %H:%M') if room.last_date }}</small>
                                     </div>
                                     <div class="col-10 mb-1 small text-muted text-truncate">{{ room.last_message or "..." }}</div>
