@@ -5,35 +5,42 @@
         <div id="board">
             <div id="title" class="article">
                 <h1>
-                    <a href="/new">새내기게시판</a> 
+                    <a href="{{ url_for('main.board_list', board_type=board_type) }}">자유게시판</a> 
                 </h1>
             </div>
             <div id="text" class="article">
                 <img class="profileimg" src="{{ url_for('static', filename='images/0.png') }}">
                 <div class="profile" style="position: relative;">
-                    <h3 class="large">{{ row.id }}</h3>
+                    
+                    {#--- 1. 작성자 이름 표시 ---#}
+                    <h3 class="large">{{ row.author.username }}</h3>
                     <time class="large">비공개</time>
-                    {% if current_user.is_authenticated and current_user.id == row.id %}
-                        <a href="/new/{{ row.n_num }}/delete/{{ row.n_num }}">
-                            <p class="delete">삭제</p>
-                        </a>
-                        <a href="/new/{{ row.n_num }}/edit/{{ row.n_num }}">
-                            <p class="edit">수정</p>
-                        </a>
-                    {% endif %}
+                    
+                    {#--- 2. 버튼 위치 및 로직 ---#}
+                    <div style="position: absolute; top: 20px; right: 5px; font-size: 14px;">
+                        
+                        {# 본인 글일 경우 (수정/삭제) #}
+                        {% if current_user.is_authenticated and current_user.id == row.author_id %}
+                            <a href="{{ url_for('main.board_edit', board_type=board_type, post_id=row.n_num) }}" style="color: #a6a6a6; text-decoration: none; margin-right: 10px;">수정</a>
+                            <form action="{{ url_for('main.board_delete', board_type=board_type, post_id=row.n_num) }}" method="post" onsubmit="return confirm('정말로 삭제하시겠습니까?');" style="display: inline;">
+                                <button type="submit" style="border:none; background:none; padding:0; cursor:pointer; color: #d93d3d; text-decoration: none; font-size: 14px; vertical-align: baseline;">삭제</button>
+                            </form>
 
-                    {% if current_user.is_authenticated and current_user.id != row.id %}
-                        <a href="{{ url_for('message.create_from_post', board_type='new', post_id=row.n_num) }}" 
-                        style="position: absolute; top: 5px; right: 5px;">
-                            <p class="message">쪽지</p>
-                        </a>
-                    {% endif %}
+                        {# 다른 사람 글일 경우 (쪽지) #}
+                        {% elif current_user.is_authenticated and current_user.id != row.author_id %}
+                            <a href="{{ url_for('message.create_from_post', board_type=board_type, post_id=row.n_num) }}" style="color: #a6a6a6; text-decoration: none;">
+                                쪽지
+                            </a>
+                        {% endif %}
+                    </div>
 
-                    <h2 class="large">{{ row.n_title }}</h2>
-                    <p class="large">{{ row.n_txt }}</p>
+                    <h2 class="large" style="margin-top: 20px;">{{ row.n_title }}</h2>
+                    <p class="large">{{ row.n_txt | safe }}</p>
                 </div>
             </div>
-            <div id="comment">
+            
+            {#--- 댓글 부분은 기존 코드를 유지 ---#}
+           <div id="comment">
                 <div class="parent">
                     <img class="commentpro" src="{{ url_for('static', filename='images/0.png') }}">
                     <h3 class="medium">익명</h3>
@@ -46,4 +53,4 @@
             </div>
         </div>
     </div>
-{% endblock %} 
+{% endblock %}
