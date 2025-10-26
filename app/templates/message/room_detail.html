@@ -57,11 +57,11 @@
                         style="margin-right: 10px; border: none; background: none; padding: 0;">
                             <img src="{{ url_for('static', filename='images/message_icon.png') }}" height="28" alt="쪽지함" style="vertical-align: middle;">
                     </a>
-                    <a href="#" title="마이페이지" 
-                        style="margin-right: 15px; border: none; background: none; padding: 0;">
-                            <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
+                    <a href="{{ url_for('mypage.profile') }}" title="마이페이지" 
+                    style="margin-right: 15px; border: none; background: none; padding: 0;">
+                        <img src="{{ url_for('static', filename='images/mypage_icon.png') }}" height="28" alt="마이페이지" style="vertical-align: middle;">
                     </a>
-                    <span style="margin-right: 10px;">{{ current_user.id }} 님 안녕하세요</span>
+                    <span style="margin-right: 10px;">{{ current_user.username }} 님 안녕하세요</span>
                     <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
                 {% endif %}
             </div>
@@ -88,7 +88,7 @@
                         {% for room in rooms %}
                             <a href="{{ url_for('message.room_detail', room_id=room.room_id) }}" class="list-group-item list-group-item-action py-3 {% if room.room_id == current_room_id %}active{% endif %}">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <strong class="mb-1">{{ room.other_user_id }}</strong>
+                                    <strong class="mb-1">{{ room.other_user_username }}</strong>
                                     <small class="text-muted">{{ room.last_date.strftime('%m/%d %H:%M') if room.last_date }}</small>
                                 </div>
                                 <div class="col-10 mb-1 small text-muted text-truncate">{{ room.last_message or "..." }}</div>
@@ -105,8 +105,8 @@
                     <div class="p-3 flex-grow-1" style="overflow-y: auto;">
                         {% for msg in messages %}
                             <div class="mb-3">
-                                <strong class="mb-1 {% if msg.sender_id == current_user.id %}sent-message-label{% else %}received-message-label{% endif %}">
-                                    {% if msg.sender_id == current_user.id %}보낸 쪽지{% else %}받은 쪽지{% endif %}
+                                <strong class="mb-1 {% if msg.sender_id|int == current_user.id|int %}sent-message-label{% else %}received-message-label{% endif %}">
+                                    {% if msg.sender_id|int == current_user.id|int %}보낸 쪽지{% else %}받은 쪽지{% endif %}
                                 </strong>
                                 <small class="text-muted float-end">{{ msg.created_at }}</small>
                                 <p class="mb-0 mt-1" style="word-wrap: break-word; font-size: 1rem;">{{ msg.content | safe }}</p>
@@ -131,7 +131,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
