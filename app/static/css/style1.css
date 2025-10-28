@@ -1,0 +1,456 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-size: 18px;
+  text-align: center;
+}
+body,
+div,
+nav,
+aside,
+article,
+h1,
+h2,
+h3,
+h4,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+p,
+span,
+form,
+th,
+td,
+input,
+textarea,
+select,
+pre,
+address {
+  color: #666;
+  font-family: "맑은 고딕", 돋움, tahoma;
+  font-size: 12px;
+  letter-spacing: -0.5px;
+}
+hr {
+  border: none;
+  height: 1px;
+  color: #d6d6d6; /* old IE */
+  background-color: #d6d6d6; /* Modern Browsers */
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:focus {
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  text-decoration: none;
+}
+/* ----------------------------헤더------------------------------ */
+#header {
+  min-height: 75px;
+  border-top: 1px solid #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  padding-bottom: 7px;
+}
+#logo {
+  margin-left: 24px;
+  padding: 12px 16px 20px 0px;
+}
+#ad > img {
+  height: 145px;
+  width: 600px;
+}
+#logo > a > img {
+  margin-right: 10px;
+  height: 40px;
+  width: 40px;
+}
+#logo > p {
+  display: inline-block;
+}
+.schoolname {
+  display: block;
+  font-size: 22px;
+  padding-left: 10px;
+}
+.eta {
+  margin-top: 20px;
+  margin-left: 3px;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #c62917;
+}
+
+nav > div.wrap {
+  margin: 0 auto;
+  width: 1180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* ---- */
+
+#menu {
+  width: 600px;
+}
+#menu > ul > li {
+  display: inline-block;
+  padding: 25px 12px;
+  color: #4c4c4c;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ---- */
+#account {
+  padding: 20px 0;
+  margin-right: 24px;
+}
+#account > .button {
+  padding: 0 12px;
+}
+#account a {
+  position: relative;
+  display: inline-block;
+  margin-left: 4px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #d6d6d6;
+  border-radius: 12px;
+  vertical-align: middle;
+  color: #666;
+}
+#account p {
+  position: relative;
+  display: inline-block;
+  margin: 0 8px 0 4px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  color: #666;
+}
+#account a.button.red {
+  border: 0;
+  color: #fff;
+  font-weight: bold;
+  background-color: #c62917;
+}
+/* ------------------------------------------------------- */
+
+/* ----------------------------서브메뉴-------------------- */
+
+#submenu {
+  border-bottom: 1px solid #d6d6d6;
+  background-color: #f2f2f2;
+}
+#submenu > div.wrap {
+  box-sizing: border-box;
+  font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+}
+#submenu > div.wrap > div.divider {
+  width: 1px;
+  height: 150px;
+  background-color: #e3e3e3;
+  display: inline-block;
+  margin-right: 15px;
+}
+#submenu > div.wrap > ul {
+  margin: -3px auto;
+  max-width: 780px;
+  font-size: 0;
+  white-space: normal;
+}
+#submenu > div.wrap {
+  padding: 15px;
+}
+ul,
+ol,
+li,
+menu {
+  list-style-type: none;
+}
+li {
+  padding-bottom: 3px;
+}
+#submenu > div.wrap > ul {
+  margin: -3px auto;
+  max-width: 780px;
+  font-size: 0;
+  white-space: normal;
+}
+#submenu > div.wrap > ul > li {
+  margin: 3px 10px;
+  max-width: 130px;
+}
+#submenu > div.wrap > ul > li {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#submenu > div.wrap > ul > li > a {
+  font-size: 14px;
+  color: #4c4c4c;
+}
+/* ------------------------------------------------------- */
+
+/* ------------------------------wrap------------ */
+#wrap {
+  position: relative;
+  margin: 0 auto 25px auto;
+  width: 1180px;
+  box-sizing: border-box;
+}
+/* -------------------------------------------------- */
+#box {
+  position: relative;
+  margin: 0 auto;
+  min-height: 900px;
+  display: grid;
+  grid-template-areas:
+    "a main b"
+    "a main b"
+    "a main b"
+    ". main ."
+    "footer footer footer";
+  grid-template-columns: 175px 600px 350px;
+  grid-template-rows: 250px 220px 300px 300px 100px;
+  height: 100%;
+  grid-gap: 5px;
+  grid-auto-flow: column;
+}
+#board {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "ad ad"
+    "free secret"
+    "A1 A2"
+    "A3 A4"
+    "A5 A6";
+  grid-template-columns: 300px 300px;
+  grid-template-rows: 160px 200px 200px 200px 200px;
+}
+#lfbar {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "lflogin"
+    "lfad1"
+    "lfad2"
+    "lfad3";
+  grid-template-columns: 1fr;
+  grid-template-rows: 180px 118px 118px 118px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
+#rightbar {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "rsearch"
+    "rarticle1"
+    "rarticle2"
+    "rarticle3";
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px 232px 232px 232px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
+#rsearch {
+  grid-area: rsearch;
+  border: 1px solid #d6d6d6;
+}
+#rarticle1 {
+  grid-area: rarticle1;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+}
+#rarticle2 {
+  grid-area: rarticle2;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+}
+#rarticle3 {
+  grid-area: rarticle3;
+  border: 1px solid #d6d6d6;
+  background-color: #f9f9f9;
+}
+#ad {
+  grid-area: ad;
+  padding-top: 5px;
+  margin-bottom: 15px;
+}
+#free {
+  grid-area: free;
+}
+#secret {
+  grid-area: secret;
+}
+#A1 {
+  grid-area: A1;
+}
+#A2 {
+  grid-area: A2;
+}
+#A3 {
+  grid-area: A3;
+}
+#A4 {
+  grid-area: A4;
+}
+#A5 {
+  grid-area: A5;
+}
+#A6 {
+  grid-area: A6;
+}
+#lflogin {
+  grid-area: lflogin;
+  border: 1px solid #d6d6d6;
+  background-color: #fff;
+  border-radius: 3px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+#lfad1 {
+  grid-area: lfad1;
+  border: 1px solid black;
+}
+#lfad2 {
+  grid-area: lfad2;
+  border: 1px solid black;
+}
+#lfad3 {
+  grid-area: lfad3;
+  border: 1px solid black;
+}
+#footer,
+#main,
+#left,
+#right {
+  margin: 5px;
+}
+#left {
+  grid-area: a;
+}
+#right {
+  grid-area: b;
+}
+#footer {
+  grid-area: footer;
+}
+#main {
+  grid-area: main;
+  min-height: 1000px;
+}
+#lflogin > form.login {
+  padding: 30px 15px 15px 15px;
+}
+#lflogin > form.login > h3 {
+  margin-bottom: 15px;
+  padding: 0;
+  color: #292929;
+  font-size: 13px;
+  font-weight: normal;
+  text-align: center;
+  line-height: 1.4;
+}
+#lflogin > form.login > a.button {
+  display: block;
+  margin-bottom: 5px;
+  height: 35px;
+  line-height: 35px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+}
+#lflogin > form.login > a.button.login {
+  border: 1px solid #d6d6d6;
+  color: #737373;
+  background-color: #fff;
+}
+#lflogin > form.login > a.button.register {
+  border: 1px solid #d6d6d6;
+  color: #fff;
+  background-color: #c62917;
+}
+
+/* 게시판 목록 */
+#board > div.article > li > a {
+  color: black;
+  text-decoration: underline;
+}
+#board > div.card {
+  float: left;
+  margin: 0 5px 5px 0;
+  width: 295px;
+  border: 1px solid #e3e3e3;
+  overflow: hidden;
+  background-color: #fff;
+}
+#board div.article h3 {
+  padding: 10px;
+  text-align: left;
+}
+#board div.article h3 > a {
+  left: 0;
+  line-height: 20px;
+  color: #c62917;
+  font-size: 14px;
+  font-weight: bold;
+}
+#board div.card > div.article > a {
+  display: block;
+  padding: 10px;
+  border-top: 1px solid #e3e3e3;
+  text-align: left;
+}
+#board div.card > div.article > a.list > p {
+  height: 17px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #4c4c4c;
+  font-size: 14px;
+}
+#board hr {
+  clear: both;
+  width: 100%;
+  height: 0;
+  border: 0;
+}
+
+/* HTML 순서가 달라도 시각적 순서를 강제하는 CSS */
+#logo {
+  order: 1;
+}
+#menu {
+  order: 2;
+}
+#account {
+  order: 3;
+}
