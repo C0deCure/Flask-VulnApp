@@ -59,6 +59,7 @@ a:hover,
 a:active {
   text-decoration: none;
 }
+<<<<<<< HEAD
 /* ----------------------------헤더------------------------------ */
 #header {
   min-height: 75px;
@@ -67,6 +68,21 @@ a:active {
   padding-bottom: 7px;
 }
 #logo {
+=======
+/*  ----------------------------헤더------------------------------ */
+#header {
+  display: flex;
+  height: 75px;
+  border-top: 1px solid #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  padding-bottom: 7px;
+  /* position: sticky; */
+  /* top: 4px; */
+  /* background-color: green; */
+}
+#logo {
+  float: left;
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
   margin-left: 24px;
   padding: 12px 16px 20px 0px;
 }
@@ -87,6 +103,12 @@ a:active {
   font-size: 22px;
   padding-left: 10px;
 }
+<<<<<<< HEAD
+=======
+/* #logo > p > span.name.eta {
+  margin-left: 20px;
+} */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 .eta {
   margin-top: 20px;
   margin-left: 3px;
@@ -97,16 +119,29 @@ a:active {
 }
 
 nav > div.wrap {
+<<<<<<< HEAD
   margin: 0 auto;
   width: 1180px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+=======
+  /* background-color: fuchsia; */
+  margin: 0 auto;
+  width: 1180px;
+  height: 100%;
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 }
 /* ---- */
 
 #menu {
+<<<<<<< HEAD
   width: 600px;
+=======
+  margin: 0 auto;
+  width: 600px;
+  /* height: 100%; */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 }
 #menu > ul > li {
   display: inline-block;
@@ -120,10 +155,19 @@ nav > div.wrap {
 #account {
   padding: 20px 0;
   margin-right: 24px;
+<<<<<<< HEAD
 }
 #account > .button {
   padding: 0 12px;
 }
+=======
+  float: right;
+}
+#acount > .button {
+  padding: 0 12px;
+}
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #account a {
   position: relative;
   display: inline-block;
@@ -133,12 +177,17 @@ nav > div.wrap {
   box-sizing: border-box;
   border: 1px solid #d6d6d6;
   border-radius: 12px;
+<<<<<<< HEAD
   vertical-align: middle;
+=======
+  vertical-align: top;
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
   color: #666;
 }
 #account p {
   position: relative;
   display: inline-block;
+<<<<<<< HEAD
   margin: 0 8px 0 4px;
   height: 40px;
   line-height: 40px;
@@ -146,6 +195,18 @@ nav > div.wrap {
   vertical-align: middle;
   color: #666;
 }
+=======
+  margin-left: 4px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  /* border: 1px solid #d6d6d6; */
+  /* border-radius: 12px; */
+  vertical-align: top;
+  color: #666;
+}
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #account a.button.red {
   border: 0;
   color: #fff;
@@ -168,6 +229,10 @@ nav > div.wrap {
   overflow: hidden;
   overflow-x: auto;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #submenu > div.wrap > div.divider {
   width: 1px;
   height: 150px;
@@ -184,6 +249,18 @@ nav > div.wrap {
 #submenu > div.wrap {
   padding: 15px;
 }
+<<<<<<< HEAD
+=======
+
+#submenu > div.wrap {
+  box-sizing: border-box;
+  font-size: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+}
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 ul,
 ol,
 li,
@@ -203,6 +280,10 @@ li {
   margin: 3px 10px;
   max-width: 130px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #submenu > div.wrap > ul > li {
   display: inline-block;
   white-space: nowrap;
@@ -213,6 +294,29 @@ li {
   font-size: 14px;
   color: #4c4c4c;
 }
+<<<<<<< HEAD
+=======
+/* #submenu > #wrapper1 {
+  margin: 0 auto;
+  padding: 0 550px;
+} */
+
+/* #submenu > div.wrap > div {
+  width: 130px;
+} */
+
+/* #wrapper1 {
+  margin: 0 auto;
+  padding: 0 280px;
+  width: 1080px;
+  background-color: black; */
+/* } */
+
+/* #submenu > .wrap > div {
+  float: left;
+  width: 100px;
+} */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 /* ------------------------------------------------------- */
 
 /* ------------------------------wrap------------ */
@@ -221,6 +325,10 @@ li {
   margin: 0 auto 25px auto;
   width: 1180px;
   box-sizing: border-box;
+<<<<<<< HEAD
+=======
+  /* background-color: sandybrown; */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 }
 /* -------------------------------------------------- */
 #box {
@@ -240,6 +348,10 @@ li {
   grid-gap: 5px;
   grid-auto-flow: column;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #board {
   position: relative;
   display: grid;
@@ -278,6 +390,10 @@ li {
   grid-column-gap: 5px;
   grid-row-gap: 5px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #rsearch {
   grid-area: rsearch;
   border: 1px solid #d6d6d6;
@@ -286,22 +402,42 @@ li {
   grid-area: rarticle1;
   border: 1px solid #d6d6d6;
   background-color: #f9f9f9;
+<<<<<<< HEAD
+=======
+  /* border: 1px solid black; */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 }
 #rarticle2 {
   grid-area: rarticle2;
   border: 1px solid #d6d6d6;
   background-color: #f9f9f9;
+<<<<<<< HEAD
+=======
+  /* border: 1px solid black; */
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 }
 #rarticle3 {
   grid-area: rarticle3;
   border: 1px solid #d6d6d6;
   background-color: #f9f9f9;
+<<<<<<< HEAD
 }
+=======
+  /* border: 1px solid black; */
+}
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #ad {
   grid-area: ad;
   padding-top: 5px;
   margin-bottom: 15px;
 }
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #free {
   grid-area: free;
 }
@@ -326,6 +462,10 @@ li {
 #A6 {
   grid-area: A6;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #lflogin {
   grid-area: lflogin;
   border: 1px solid #d6d6d6;
@@ -346,10 +486,15 @@ li {
   grid-area: lfad3;
   border: 1px solid black;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #footer,
 #main,
 #left,
 #right {
+<<<<<<< HEAD
   margin: 5px;
 }
 #left {
@@ -361,13 +506,43 @@ li {
 #footer {
   grid-area: footer;
 }
+=======
+  /* border: 1px solid #999; */
+  margin: 5px;
+  /* padding: 10px; */
+}
+
+#left {
+  grid-area: a;
+  /* background-color: yellow; */
+}
+
+#right {
+  grid-area: b;
+  /* background-color: green; */
+}
+
+#footer {
+  grid-area: footer;
+  /* background-color: blue; */
+}
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #main {
   grid-area: main;
   min-height: 1000px;
 }
+<<<<<<< HEAD
 #lflogin > form.login {
   padding: 30px 15px 15px 15px;
 }
+=======
+
+#lflogin > form.login {
+  padding: 30px 15px 15px 15px;
+}
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #lflogin > form.login > h3 {
   margin-bottom: 15px;
   padding: 0;
@@ -411,6 +586,10 @@ li {
   overflow: hidden;
   background-color: #fff;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #board div.article h3 {
   padding: 10px;
   text-align: left;
@@ -422,6 +601,10 @@ li {
   font-size: 14px;
   font-weight: bold;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #board div.card > div.article > a {
   display: block;
   padding: 10px;
@@ -437,12 +620,17 @@ li {
   color: #4c4c4c;
   font-size: 14px;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 #board hr {
   clear: both;
   width: 100%;
   height: 0;
   border: 0;
 }
+<<<<<<< HEAD
 
 /* HTML 순서가 달라도 시각적 순서를 강제하는 CSS */
 #logo {
@@ -454,3 +642,5 @@ li {
 #account {
   order: 3;
 }
+=======
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910

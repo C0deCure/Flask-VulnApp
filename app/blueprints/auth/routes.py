@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 from flask import render_template, request, redirect, url_for, flash, Blueprint, make_response
@@ -31,6 +32,15 @@ def verify_jwt_token(token):
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
 
+=======
+from flask import render_template, request, redirect, url_for, flash, Blueprint, make_response
+from app.models.user import User
+from app import get_db, create_jwt_token, verify_jwt_token
+
+# Blueprint 생성
+auth_bp = Blueprint('auth', __name__)
+
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """로그인"""
@@ -42,6 +52,7 @@ def login():
             flash('아이디와 비밀번호를 모두 입력해주세요.', 'error')
             return render_template('login.html', title='로그인')
         
+<<<<<<< HEAD
         # 이제 user_id(String)로 기본 키 조회가 정상적으로 작동
         user = User.query.get(user_id)
         
@@ -50,6 +61,17 @@ def login():
             
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie('auth_token', token, httponly=True, max_age=JWT_EXPIRATION_HOURS * 3600)
+=======
+        user = User.get(user_id)
+        
+        if user and user.check_password(password):
+            # JWT 토큰 생성
+            token = create_jwt_token(user_id)
+            
+            # 응답 생성
+            response = make_response(redirect(url_for('main.index')))
+            response.set_cookie('auth_token', token, httponly=True, max_age=24*60*60)  # 24시간
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
             
             flash('로그인되었습니다.', 'success')
             return response
@@ -74,14 +96,20 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         
+<<<<<<< HEAD
         if not all([user_id, password, confirm_password]):
             flash('모든 필드를 입력해주세요.', 'error')
+=======
+        if not user_id or not password:
+            flash('아이디와 비밀번호를 모두 입력해주세요.', 'error')
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
             return render_template('register.html', title='회원가입')
         
         if password != confirm_password:
             flash('비밀번호가 일치하지 않습니다.', 'error')
             return render_template('register.html', title='회원가입')
         
+<<<<<<< HEAD
         # 이제 user_id(String)로 중복 체크가 정상적으로 작동
         if User.query.get(user_id):
             flash('이미 존재하는 아이디입니다.', 'error')
@@ -93,9 +121,22 @@ def register():
         
         db.session.add(new_user)
         db.session.commit()
+=======
+        if User.get(user_id):
+            flash('이미 존재하는 아이디입니다.', 'error')
+            return render_template('register.html', title='회원가입')
+        
+        user = User(id=user_id)
+        user.set_password(password)
+        user.save()
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
         
         flash('회원가입이 완료되었습니다. 로그인해주세요.', 'success')
         return redirect(url_for('auth.login'))
     
+<<<<<<< HEAD
     return render_template('register.html', title='회원가입')
 >>>>>>> Stashed changes
+=======
+    return render_template('register.html', title='회원가입') 
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
 from datetime import datetime
 
 def format_datetime(dt):
@@ -18,6 +21,7 @@ def truncate_text(text, length=100):
     """텍스트 자르기"""
     if len(text) <= length:
         return text
+<<<<<<< HEAD
     return text[:length] + '...' 
 
 from app.models import PointHistory
@@ -31,3 +35,6 @@ def has_unlocked_exam(user_id: str, exam_id: int) -> bool:
         ref_id=exam_id
     ).first() is not None
 >>>>>>> Stashed changes
+=======
+    return text[:length] + '...' 
+>>>>>>> d2f9f73d86bfa294f94db90eab8290f45c3a0910
