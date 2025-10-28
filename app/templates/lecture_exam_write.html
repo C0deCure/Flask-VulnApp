@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>시험 정보 등록 - {{ lec.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0}
+    .container{max-width:800px;margin:24px auto;padding:0 16px}
+    .card{border:1px solid #eee;border-radius:12px;padding:18px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .label{font-weight:700;margin:14px 0 6px}
+    select, input[type="text"], textarea{
+      width:100%; box-sizing:border-box; border:1px solid #d6d6d6; border-radius:10px; padding:12px; font-size:14px;
+    }
+    textarea{min-height:180px; resize:vertical}
+    .pill-group{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
+    .pill{
+      display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border:1px solid #e3e3e3;
+      border-radius:999px; background:#fff; cursor:pointer; user-select:none;
+    }
+    .pill input{display:none}
+    .pill.active{border-color:#c62917; background:#fff3f2; color:#c62917; font-weight:700}
+    .btn{display:inline-block; border:1px solid #d6d6d6; padding:10px 14px; border-radius:12px; text-decoration:none; color:#333}
+    .btn.red{border:0; background:#c62917; color:#fff}
+    .hint{color:#777; font-size:12px}
+    .danger{color:#c62917}
+    .add-sample{margin-top:8px}
+  </style>
+</head>
+<body>
+  {% include 'partials/_topbar.html' %}
+
+  <div class="container">
+    <h2 style="margin:8px 0">{{ lec.name }} — 시험 정보 등록</h2>
+    <div style="color:#666; margin-bottom:12px;">{{ lec.professor }} · {{ lec.campus or '-' }}</div>
+
+    <form action="{{ url_for('lecture.exam_info_create', lecture_id=lec.lecture_id) }}" method="post" class="card" id="examForm">
+
+      <div class="label">응시한 시험</div>
+      <div class="row">
+        <div style="flex:1 1 260px">
+          <select name="semester" required>
+            <option value="" disabled selected>수강 학기 선택</option>
+            <option>2023-1</option>
+            <option>2023-2</option>
+            <option>2024-1</option>
+            <option>2024-2</option>
+            <option>2025-1</option>
+          </select>
+        </div>
+        <div style="flex:1 1 200px">
+          <select name="round" required>
+            <option value="" disabled selected>시험 회차 선택</option>
+            <option>중간고사</option>
+            <option>기말고사</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="label">시험 전략</div>
+      <textarea name="strategy" placeholder="시험에 대한 전략, 공부 방법, 노하우를 자유롭게 적어주세요." required></textarea>
+
+      <div class="label">문제 유형 <span class="hint">(복수선택)</span></div>
+      <div class="pill-group" id="typeGroup">
+        {% for t in ['객관식','주관식','T/F형','약술형','논술형','구술','기타'] %}
+        <label class="pill">
+          <input type="checkbox" name="types" value="{{ t }}">
+          <span>{{ t }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+ 
+      <div class="label" style="margin-top:16px;">문제 예시</div>
+      <div class="hint">예) 게임이론의 정의와 두 가지 이상의 사례를 작성하세요.</div>
+      <div id="samples">
+        <input type="text" name="samples" placeholder="1." class="add-sample">
+        <input type="text" name="samples" placeholder="2." class="add-sample">
+      </div>
+      <button type="button" class="btn add-sample" id="addSampleBtn">＋ 더 입력하기</button>
+
+      <div class="hint" style="margin-top:18px;">
+        ※ 시험 정보를 등록하면 <b class="danger">20 포인트</b>가 적립됩니다.<br>
+        ※ <span class="danger">수정 및 삭제가 불가능</span>하므로 신중히 작성해주세요.<br>
+        ※ 허위, 중복, 저작권 침해, 성의없는 내용 작성 시 서비스 이용이 제한될 수 있습니다.
+      </div>
+
+      <div style="margin-top:18px; display:flex; justify-content:center;">
+        <button type="submit" class="btn red" style="min-width:280px; font-size:18px;">등록하기</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+
+    document.querySelectorAll('#typeGroup .pill input').forEach(ip=>{
+      ip.addEventListener('change', e=>{
+        e.target.closest('.pill').classList.toggle('active', e.target.checked);
+      });
+    });
+
+    document.getElementById('addSampleBtn').addEventListener('click', ()=>{
+      const box = document.getElementById('samples');
+      const idx = box.querySelectorAll('input[name="samples"]').length + 1;
+      const ip = document.createElement('input');
+      ip.type = 'text'; ip.name = 'samples';
+      ip.placeholder = idx + '.';
+      ip.className = 'add-sample';
+      box.appendChild(ip);
+    });
+  </script>
+</body>
+</html>
