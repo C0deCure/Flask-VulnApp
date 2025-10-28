@@ -17,14 +17,3 @@ def truncate_text(text, length=100):
     if len(text) <= length:
         return text
     return text[:length] + '...' 
-
-from app.models import PointHistory
-
-def has_unlocked_exam(user_id: str, exam_id: int) -> bool:
-    """해당 사용자가 특정 시험 정보를 열람한 적이 있는지 확인"""
-    return PointHistory.query.filter_by(
-        user_id=user_id,
-        reason="EXAM_INFO_VIEW",
-        ref_type="exam_info",
-        ref_id=exam_id
-    ).first() is not None
