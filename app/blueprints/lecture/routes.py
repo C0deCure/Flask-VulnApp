@@ -4,6 +4,7 @@ from app.extensions import db
 from app.utils.helpers import has_unlocked_exam
 from app.blueprints.auth.routes import verify_jwt_token
 from app.models import Lecture, LectureReview, ExamInfo, PointHistory
+from sqlalchemy import func
 
 lecture_bp = Blueprint("lecture", __name__)
 
@@ -87,7 +88,12 @@ def lecture_reviews(lecture_id):
     lec = Lecture.query.get(lecture_id)
     if not lec:
         return "강의를 찾을 수 없습니다.", 404
+    
+    # 평균 별점 계산
+    avg_rating_result = db.session.query(func.avg(LectureReview.rating)).filter_by(lecture_id=lecture_id).scalar()
+    avg_rating = round(avg_rating_result, 2) if avg_rating_result is not None else None
 
+    
     rows = LectureReview.query.filter_by(lecture_id=lecture_id).order_by(LectureReview.r_id.desc()).all()
     reviews = []
     for r in rows:
@@ -98,10 +104,11 @@ def lecture_reviews(lecture_id):
             "content": r.content,
             "author": r.author,
             "created_at": r.created_at,
+            "rating": r.rating,
             "preview": txt[:140] + ("..." if len(txt) > 140 else "")
         })
 
-    return render_template("lecture_page.html", lec=lec, reviews=reviews)
+    return render_template("lecture_page.html", lec=lec, reviews=reviews, avg_rating=avg_rating)
 
 
 @lecture_bp.route("/<int:lecture_id>/reviews/write", methods=["GET"], endpoint="lecture_review_write")
@@ -118,8 +125,15 @@ def lecture_review_create(lecture_id):
     author = (request.form.get("author") or "익명").strip()
     content = request.form.get("content") or ""
 
-    if not semester or not content:
-        flash("학기와 내용을 입력하세요.")
+    rating = request.form.get("rating", type=int)              # 별점
+    homework = request.form.get("homework")                    # 과제
+    team_project = request.form.get("team_project")            # 조모임
+    grading = request.form.get("grading")                      # 성적
+    attendance = ",".join(request.form.getlist("attendance"))  # 출석
+    exam_count = request.form.get("exam_count")                # 시험 횟수
+
+    if not semester or not content or not rating:
+        flash("학기와 내용, 별점을 입력하세요.")
         return redirect(url_for("lecture.lecture_review_write", lecture_id=lecture_id))
 
     lec = Lecture.query.get(lecture_id)
@@ -128,7 +142,11 @@ def lecture_review_create(lecture_id):
         return redirect(url_for("lecture.lecture_home"))
 
     try:
-        review = LectureReview(lecture_id=lecture_id, semester=semester, content=content, author=author)
+        review = LectureReview(
+            lecture_id=lecture_id, semester=semester, content=content, author=author,
+            rating=rating, homework=homework, team_project=team_project, 
+            grading=grading, attendance=attendance, exam_count=exam_count
+        )
         db.session.add(review)
         db.session.flush()  # review.r_id 확보
 

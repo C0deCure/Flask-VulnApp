@@ -153,14 +153,13 @@ class LectureReview(db.Model):
     author = db.Column(db.String(100), nullable=False, default='익명')
     created_at = db.Column(db.DateTime, server_default=db.func.current_timestamp())
 
-    # --- 👇 여기에 새로운 필드들을 추가합니다 ---
     rating = db.Column(db.Integer, nullable=True)          # 별점 (1~5)
     homework = db.Column(db.String(20), nullable=True)     # 과제 (많음/보통/없음)
     team_project = db.Column(db.String(20), nullable=True) # 조모임 (많음/보통/없음)
     grading = db.Column(db.String(20), nullable=True)      # 성적 (너그러움/보통/깐깐함)
     attendance = db.Column(db.String(100), nullable=True)  # 출석 (쉼표로 구분된 문자열)
     exam_count = db.Column(db.String(20), nullable=True)   # 시험 횟수
-    # ---------------------------------------------
+  
 
     lecture = db.relationship('Lecture', back_populates='reviews')
 
