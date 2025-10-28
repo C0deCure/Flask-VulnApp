@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 from flask import jsonify, request, current_app, Blueprint
 
 # 필요한 SQLAlchemy 모델과 객체들을 가져옴
@@ -60,4 +58,3 @@ def get_board_post(board_type, post_id):
     }
     
     return jsonify(post_data)
->>>>>>> Stashed changes

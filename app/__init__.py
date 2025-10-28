@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 import os
 import jwt
 from flask import Flask, g, request
@@ -54,4 +52,3 @@ def create_app(config_name='default'):
     app.register_blueprint(lecture_bp, url_prefix='/lecture')
     
     return app
->>>>>>> Stashed changes

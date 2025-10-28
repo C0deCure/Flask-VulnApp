@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div id="main">
+        <div id="board">
+            <div id="ad">
+                <img id="mainad" src="{{ url_for('static', filename='images/mainad.jpg') }}">
+            </div>
+            <div class="card">
+                <div id="free" class="article">
+                    <h3> 
+                        <a href="/free">자유게시판</a>
+                    </h3>
+                    {% for free in frees %}
+                        <a href="/free/{{ free.f_num }}" class="list">
+                            <p>{{ free.f_title }}</p>     
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="secret" class="article">
+                    <h3>
+                        <a href="/secret">비밀게시판</a> 
+                    </h3>
+                    {% for secret in secrets %}
+                        <a href="/secret/{{ secret.s_num }}" class="list">
+                            <p>{{ secret.s_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A1" class="article">
+                    <h3> 
+                        <a href="/grad">졸업게시판</a>
+                    </h3>
+                    {% for grad in grads %}
+                        <a href="/grad/{{ grad.g_num }}" class="list">
+                            <p>{{ grad.g_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A2" class="article">
+                    <h3> 
+                        <a href="/market">장터</a>
+                    </h3>
+                    {% for market in markets %}
+                        <a href="/market/{{ market.m_num }}" class="list">
+                            <p>{{ market.m_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A3" class="article">
+                    <h3> 
+                        <a href="/new">새내기게시판</a>
+                    </h3>
+                    {% for fresh in news %}
+                        <a href="/new/{{ fresh.n_num }}" class="list">
+                            <p>{{ fresh.n_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A4" class="article">
+                    <h3>
+                        <a href="/info">정보게시판</a>
+                    </h3>
+                    {% for info in infos %}
+                        <a href="/info/{{ info.i_num }}" class="list">
+                            <p>{{ info.i_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A5" class="article">
+                    <h3> 
+                        <a href="/prom">홍보게시판</a>
+                    </h3>
+                    {% for prom in proms %}
+                        <a href="/prom/{{ prom.p_num }}" class="list">
+                            <p>{{ prom.p_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card">
+                <div id="A6" class="article">
+                    <h3> 
+                        <a href="/team">동아리게시판</a>
+                    </h3>
+                    {% for team in teams %}
+                        <a href="/team/{{ team.t_num }}" class="list">
+                            <p>{{ team.t_title }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

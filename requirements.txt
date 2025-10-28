@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 alembic==1.16.5
 blinker==1.9.0
 cffi==1.17.1
@@ -19,4 +17,3 @@ python-dotenv==1.1.1
 SQLAlchemy==2.0.43
 typing-extensions==4.15.0
 Werkzeug==3.1.3
->>>>>>> Stashed changes

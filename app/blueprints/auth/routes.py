@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 from flask import render_template, request, redirect, url_for, flash, Blueprint, make_response
 import jwt
 from datetime import datetime, timedelta, timezone
@@ -98,4 +96,3 @@ def register():
         return redirect(url_for('auth.login'))
     
     return render_template('register.html', title='회원가입')
->>>>>>> Stashed changes

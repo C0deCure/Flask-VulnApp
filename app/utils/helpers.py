@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 from datetime import datetime
 
 def format_datetime(dt):
@@ -30,4 +28,3 @@ def has_unlocked_exam(user_id: str, exam_id: int) -> bool:
         ref_type="exam_info",
         ref_id=exam_id
     ).first() is not None
->>>>>>> Stashed changes

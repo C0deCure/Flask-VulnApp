@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 from flask import render_template, request, redirect, url_for, flash, current_app, Blueprint, g
 from datetime import datetime
 
@@ -151,4 +149,3 @@ def board_delete(board_type, post_id):
     db.session.commit()
     flash('게시글이 삭제되었습니다.', 'success')
     return redirect(url_for('main.board_list', board_type=board_type))
->>>>>>> Stashed changes
