@@ -1,0 +1,42 @@
+<nav id="header">
+  <div class="wrap">
+    <div id="logo">
+      <a href="{{ url_for('main.index') }}">
+        <img id="img" src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
+      </a>
+      <p>
+        <span class="eta">에브리타임</span>
+        <span class="schoolname">김경동</span>
+      </p>
+    </div>
+
+    <div id="menu">
+      <ul>
+        <li><a href="{{ url_for('main.index') }}">게시판</a></li>
+        <li><a href="#">시간표</a></li>
+        <li>
+          <a href="{{ url_for('lecture.lecture_home') }}"
+             class="{% if request.path.startswith('/lecture') %}active{% endif %}">
+            강의실
+          </a>
+        </li>
+        <li><a href="#">학점계산기</a></li>
+        <li><a href="#">친구</a></li>
+        <li><a href="#">책방</a></li>
+        <li><a href="#">캠퍼스픽</a></li>
+      </ul>
+    </div>
+
+
+    <div id="account">
+      {% set _name = user_name or (current_user.is_authenticated and (current_user.username or current_user.id)) %}
+      {% if _name %}
+        <p>{{ _name }} 님 안녕하세요</p>
+        <a href="{{ url_for('auth.logout') }}" class="button red">로그아웃</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="button">로그인</a>
+        <a href="{{ url_for('auth.register') }}" class="button red">회원가입</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
