@@ -11,7 +11,10 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     PERMANENT_SESSION_LIFETIME = timedelta(hours=2)
-    
+
+    # 파일 저장 폴더
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static/uploads')
+
     # 게시판 타입들
     BOARD_TYPES = ['free', 'secret', 'grad', 'market', 'new', 'info', 'prom', 'team']
     

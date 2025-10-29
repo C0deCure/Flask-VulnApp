@@ -23,8 +23,27 @@
                     </a>
                 {% endif %}
                 <h2 class="large">{{ post.title }}</h2>
+
                 <p id="post-text" class="large"></p>
 
+                {% if post.file_url %}
+                    <div class="uploaded-file" style="margin-top: 20px; padding: 10px; border: 1px dashed #ccc;">
+                        <p><strong>첨부파일:</strong></p>
+
+                        {% if post.file_url.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) %}
+                            <img src="{{ url_for('static', filename=post.file_url) }}"
+                                 alt="{{ post.filename }}"
+                                 style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+
+                        {% else %}
+                            <a href="{{ url_for('static', filename=post.file_url) }}"
+                               target="_blank"
+                               download="{{ post.filename }}">
+                                {{ post.filename or '파일 보기/다운로드' }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="vote-widget d-flex align-items-center" data-post-id="{{ post.id }}">
                     <button class="btn btn-outline-secondary btn-sm vote-btn upvote" data-value="1" title="추천">
                         <i class="fa-regular fa-thumbs-up"></i>
@@ -48,7 +67,6 @@
         </div>
     </div>
 </div>
-<!-- modal begin -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -79,7 +97,7 @@
     </div>
   </div>
 </div>
-<!-- modal end -->
+
 {% endblock %}
 {% block script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>

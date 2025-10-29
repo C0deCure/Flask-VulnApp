@@ -37,6 +37,9 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
+    filename = db.Column(db.String(255), nullable=True)
+    file_url = db.Column(db.String(255), nullable=True)
+
     # board = db.relationship('Board', backref=db.backref('posts', lazy='dynamic'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
     user = db.relationship('User', backref='post')

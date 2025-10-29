@@ -689,3 +689,34 @@ li {
 
 .vote-btn:hover {
     background-color: #e9ecef;
+}
+
+/* 파일 첨부 관련 */
+.write_toolbar {
+    border: 1px solid #ddd;
+    border-bottom: none; /* textarea와 겹치지 않게 */
+    padding: 8px;
+    background-color: #f9f9f9;
+}
+
+.write_toolbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex; /* 아이콘들을 가로로 나열 */
+}
+
+.write_toolbar li {
+    margin-right: 10px;
+}
+
+.toolbar_button {
+    font-size: 1.2em; /* 아이콘 크기 */
+    color: #555;
+    cursor: pointer; /* 마우스 올리면 손가락 모양 */
+    transition: color 0.2s; /* 부드러운 색상 변경 */
+}
+
+.toolbar_button:hover {
+    color: #c00; /* 마우스 올렸을 때 색상 */
+}

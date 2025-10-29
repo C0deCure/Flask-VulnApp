@@ -1,7 +1,8 @@
+import os
 from datetime import datetime
 from doctest import master
 
-from flask import Blueprint, url_for, redirect, render_template, request, session, g, flash, abort
+from flask import Blueprint, url_for, redirect, render_template, request, session, g, flash, abort, current_app
 from pip._internal import models
 from werkzeug.utils import redirect
 from flask_login import current_user, login_required
@@ -54,13 +55,48 @@ def write_post(board_url):
     """<UNK> <UNK> <UNK>"""
     board = Board.query.filter_by(url=board_url).first_or_404()
     form = PostForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        board = Board.query.filter_by(url=board_url).first_or_404()
-        post = Post(title=form.title.data, text=form.text.data, user_id=current_user.id, board_id=board.id)
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        text = request.form.get('text')
+
+        file_url = None
+        original_filename = None
+
+        if 'file_upload' in request.files:
+            file = request.files['file_upload']
+
+            if file and file.filename != '':
+                filename = file.filename
+
+                try:
+                    save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+                    file.save(save_path)
+
+                    file_url = f'uploads/{filename}'
+                    original_filename = file.filename
+
+                except Exception as e:
+                    flash(f"파일 저장 실패! 오류: {e}", "danger")
+                    return redirect(url_for('board.write_post', board_url=board_url))
+
+        # DB에 Post 저장 (파일 경로 포함)
+        post = Post(title=title,
+                    text=text,
+                    user_id=current_user.id,
+                    board_id=board.id,
+                    filename=original_filename,
+                    file_url=file_url)
+
         db.session.add(post)
         db.session.commit()
-        # flash('게시글이 작성되었습니다.', 'success')
+
         return redirect(url_for('board.board_list', board_url=board.url))
+
+    # GET 요청 시
     return render_template('masterwrite.html', board=board, form=form)
 
 # # Is it safe about CSRF?
