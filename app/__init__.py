@@ -13,6 +13,10 @@ def create_app(config_name='default'):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.instance_path, 'app.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
+    app.config['JWT_SECRET_KEY'] = os.urandom(32).hex()
+    app.config['JWT_ALGORITHM'] = 'HS256'
+    app.config['JWT_EXPIRATION_HOURS'] = 24
+    
     try:
         os.makedirs(app.instance_path)
     except OSError:
