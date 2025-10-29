@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, g
+from flask import Blueprint, render_template, request, flash, redirect, url_for, g, current_app # <-- current_app 추가
 from flask import render_template_string
 from datetime import datetime
+from jinja2.exceptions import TemplateSyntaxError
 
-# SQLAlchemy 모델과 db 객체를 가져옴
 from app.models import User, Room, Note
-from app.models import Free, Secret, Grad, Market, New, Info, Prom, Team # 게시판 모델
+from app.models import Free, Secret, Grad, Market, New, Info, Prom, Team
 from app.extensions import db
 from sqlalchemy import desc, asc
 
@@ -21,31 +21,42 @@ def room_list():
     """쪽지방 목록 보기"""
     if not g.user:
         flash('로그인이 필요합니다.', 'error'); return redirect(url_for('auth.login'))
-        
+
     rooms = sorted(g.user.rooms, key=lambda r: (r.notes.order_by(desc(Note.created_at)).first().created_at if r.notes.count() > 0 else datetime.min), reverse=True)
 
     processed_rooms = []
     for room in rooms:
         other_user = next((u for u in room.users if u.id != g.user.id), None)
         last_note = room.notes.order_by(desc(Note.created_at)).first()
-        
+
+        last_message_content = "메시지가 없습니다."
+        if last_note:
+            try:
+                # ▼▼▼ [수정] SSTI 컨텍스트에 config 객체를 주입합니다. ▼▼▼
+                ssti_context = {'config': current_app.config}
+                last_message_content = render_template_string(last_note.content, **ssti_context)
+            except TemplateSyntaxError:
+                last_message_content = last_note.content
+            except Exception:
+                last_message_content = last_note.content
+
         processed_rooms.append({
             'room_id': room.id,
             'other_user_username': other_user.username if other_user else "알수없음",
-            'last_message': render_template_string(last_note.content) if last_note else "메시지가 없습니다.",
+            'last_message': last_message_content,
             'last_date': last_note.created_at if last_note else None
         })
-        
+
     return render_template('message/room_list.html', rooms=processed_rooms)
 
 @message_bp.route('/<int:room_id>', methods=['GET', 'POST'])
 def room_detail(room_id):
-    """대화 내용 보기"""
+    """대화 내용 보기 (config 노출)"""
     if not g.user:
         flash('로그인이 필요합니다.', 'error'); return redirect(url_for('auth.login'))
 
     room = Room.query.get_or_404(room_id)
-        
+
     if request.method == 'POST':
         content = request.form.get('content')
         if content:
@@ -54,29 +65,46 @@ def room_detail(room_id):
             db.session.commit()
         return redirect(url_for('message.room_detail', room_id=room.id))
 
+    # 왼쪽 목록 (room_list와 동일하게 config 컨텍스트 주입)
     all_rooms = sorted(g.user.rooms, key=lambda r: (r.notes.order_by(desc(Note.created_at)).first().created_at if r.notes.count() > 0 else datetime.min), reverse=True)
     processed_rooms = []
     for r in all_rooms:
         other_user = next((u for u in r.users if u.id != g.user.id), None)
         last_note = r.notes.order_by(desc(Note.created_at)).first()
-        processed_rooms.append({'room_id': r.id, 'other_user_username': other_user.username if other_user else "알수없음", 'last_message': render_template_string(last_note.content) if last_note else "", 'last_date': last_note.created_at if last_note else None})
+        last_message_content = ""
+        if last_note:
+             try:
+                 ssti_context = {'config': current_app.config}
+                 last_message_content = render_template_string(last_note.content, **ssti_context)
+             except TemplateSyntaxError:
+                 last_message_content = last_note.content
+             except Exception:
+                 last_message_content = last_note.content
+        processed_rooms.append({'room_id': r.id, 'other_user_username': other_user.username if other_user else "알수없음", 'last_message': last_message_content, 'last_date': last_note.created_at if last_note else None})
 
     messages = room.notes.order_by(desc(Note.created_at)).all()
     rendered_messages = []
     for msg in messages:
         msg_dict = msg.__dict__.copy()
-        msg_dict['content'] = render_template_string(msg.content)
+        try:
+            ssti_context = {'config': current_app.config}
+            msg_dict['content'] = render_template_string(msg.content, **ssti_context)
+        except TemplateSyntaxError:
+            msg_dict['content'] = msg.content
+        except Exception as e:
+            msg_dict['content'] = msg.content
+
         msg_dict['created_at'] = msg.created_at.strftime('%Y-%m-%d %H:%M')
         rendered_messages.append(msg_dict)
-    
+
     other_user_name = next((u.username for u in room.users if u.id != g.user.id), "익명")
 
     return render_template(
-        'message/room_detail.html', 
+        'message/room_detail.html',
         rooms=processed_rooms,
         messages=rendered_messages,
         current_room_id=room_id,
-        current_room_name=other_user_name 
+        current_room_name=other_user_name
     )
 
 @message_bp.route('/create/from_post/<string:board_type>/<int:post_id>', methods=['GET', 'POST'])
