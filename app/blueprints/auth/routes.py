@@ -82,8 +82,10 @@ def register():
             flash('이미 존재하는 아이디입니다.', 'error')
             return render_template('register.html', title='회원가입')
         
+        user_id_trimmed = user_id.strip()
+        
         user = User(
-            id=user_id,
+            id=user_id_trimmed,
             name=name,
             student_number=student_number,
             department=department,
