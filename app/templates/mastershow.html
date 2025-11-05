@@ -103,7 +103,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
 <script type='text/javascript'>
     const textContent = "{{ post.text | safe }}";
-    document.getElementById("post-text").innerHTML = DOMPurify.sanitize(textContent);
+    document.getElementById("post-text").innerHTML = DOMPurify.sanitize(textContent, {PARSER_MEDIA_TYPE: "application/xhtml+xml"})
+    // document.getElementById("post-text").innerHTML = textContent;
 </script>
 <script type='text/javascript'>
     // ===== Bootstrap 모달 인스턴스 생성 =====
