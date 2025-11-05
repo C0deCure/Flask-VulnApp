@@ -3,6 +3,8 @@ from sqlalchemy import text
 from app.forms import LoginForm, RegisterForm
 from app.models.user import User
 from flask_login import current_user, login_user, logout_user
+from app import create_jwt_token, verify_jwt_token
+
 
 from werkzeug.security import generate_password_hash
 
@@ -39,9 +41,17 @@ def login():
 
         attempted_user = User.query.filter_by(username=form.username.data).first()
         if attempted_user and attempted_user.check_password(form.password.data):
-            login_user(attempted_user)
-            flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
-            return redirect(url_for('main.index'))
+            # login_user(attempted_user)
+            # JWT 토큰 생성
+            token = create_jwt_token(attempted_user.id)
+            print(token)
+
+            # 응답 생성
+            response = make_response(redirect(url_for('main.index')))
+            response.set_cookie('auth_token', token, httponly=True, max_age=24 * 60 * 60)  # 24시간
+
+            flash('로그인되었습니다.', 'success')
+            return response
         else:
             flash('Username and password are not match! Please try again', category='danger')
 
@@ -51,8 +61,9 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     """로그아웃"""
-    logout_user()
+    # logout
     response = make_response(redirect(url_for('main.index')))
+    response.delete_cookie('auth_token')
     flash('로그아웃되었습니다.', 'success')
     return response
 

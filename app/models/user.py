@@ -1,10 +1,21 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import db, login_manager
+from app import db, login_manager, verify_jwt_token
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@login_manager.request_loader
+def load_user_from_request(request):
+    """현재 사용자 정보 가져오기"""
+    token = request.cookies.get('auth_token')
+    if token:
+        user_id = verify_jwt_token(token)
+        if user_id:
+            return User.query.get(user_id)
+    return None
+
 
 class User(db.Model, UserMixin):
     """사용자 모델"""

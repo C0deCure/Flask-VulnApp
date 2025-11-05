@@ -4,7 +4,22 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+import jwt
+import os
+
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+# 환경 변수 로드
+load_dotenv()
+
+# JWT 설정
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'your-secret-key-here'
+JWT_ALGORITHM = 'HS256'
+JWT_EXPIRATION_HOURS = 24
+
 
 naming_convention = {
     "ix": 'ix_%(column_0_label)s',
@@ -49,9 +64,12 @@ def create_app(config_name='default'):
     app.jinja_env.filters['nl2br'] = nl2br
     app.jinja_env.filters['format_datetime'] = format_datetime
     app.jinja_env.filters['truncate_text'] = truncate_text
-    
-    # 전역 템플릿 변수 등록
 
+    # 전역 템플릿 변수 등록
+    # @app.context_processor
+    # def inject_user():
+    #     from flask import request
+    #     return {'current_user': get_current_user(request)}
     
     # Blueprint 등록
     from .blueprints.main import main_bp
@@ -76,6 +94,36 @@ def create_app(config_name='default'):
         insert_default_boards()
 
     return app
+
+def create_jwt_token(user_id):
+    """JWT 토큰 생성"""
+    payload = {
+        'user_id': user_id,
+        'exp': datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
+        'iat': datetime.utcnow()
+    }
+    return jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+
+def verify_jwt_token(token):
+    """JWT 토큰 검증"""
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        return payload['user_id']
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+def get_current_user(request):
+    """현재 사용자 정보 가져오기"""
+    token = request.cookies.get('auth_token')
+    if token:
+        user_id = verify_jwt_token(token)
+        if user_id:
+            return {'id': user_id, 'is_authenticated': True}
+    return {'id': None, 'is_authenticated': False}
+
+
 
 '''
 folder name app?
