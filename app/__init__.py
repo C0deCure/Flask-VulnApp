@@ -12,10 +12,13 @@ load_dotenv()
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'your-secret-key-here'
 JWT_ALGORITHM = 'HS256'
 JWT_EXPIRATION_HOURS = 24
+JWT_REFRESHS_EXPIRATION_DAYS = 7
 
 def get_db():
     """데이터베이스 연결"""
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance', 'app.db')
+    db_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'instance')
+    os.makedirs(db_dir, exist_ok=True)
+    db_path = os.path.join(db_dir, 'app.db')
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
@@ -25,11 +28,17 @@ def init_db():
     with get_db() as db:
         cursor = db.cursor()
         
-        # 사용자 테이블 생성
+        # 사용자 테이블 생성 (필드 추가)
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS user (
-                id TEXT PRIMARY KEY,
-                password TEXT NOT NULL,
+                id TEXT PRIMARY KEY,                -- 아이디
+                password TEXT NOT NULL,             -- 비밀번호
+                name TEXT NOT NULL,                 -- 이름
+                student_number TEXT NOT NULL,       -- 학번
+                department TEXT NOT NULL,           -- 학과
+                email TEXT NOT NULL,                -- 이메일
+                phone TEXT NOT NULL,                -- 전화번호
+                terms_agreed INTEGER NOT NULL,      -- 약관 동의 (1: 동의, 0: 미동의)
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -129,14 +138,18 @@ def create_jwt_token(user_id):
     payload = {
         'user_id': user_id,
         'exp': datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),
-        'iat': datetime.utcnow()
+        'iat': datetime.utcnow(),
+        'type': 'refresh'
     }
-    return jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    return token
 
-def verify_jwt_token(token):
+def verify_jwt_token(token, refresh=False):
     """JWT 토큰 검증"""
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        if refresh and payload.get('type') != 'refresh':
+            return None
         return payload['user_id']
     except jwt.ExpiredSignatureError:
         return None

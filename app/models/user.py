@@ -4,9 +4,15 @@ from app import get_db
 class User:
     """사용자 모델"""
     
-    def __init__(self, id, password=None, created_at=None):
+    def __init__(self, id, password=None, name=None, student_number=None, department=None, email=None, phone=None, terms_agreed=0, created_at=None):
         self.id = id
         self.password = password
+        self.name = name
+        self.student_number = student_number
+        self.department = department
+        self.email = email
+        self.phone = phone
+        self.terms_agreed = terms_agreed
         self.created_at = created_at
     
     @staticmethod
@@ -20,6 +26,12 @@ class User:
                 return User(
                     id=row['id'],
                     password=row['password'],
+                    name=row['name'],
+                    student_number=row['student_number'],
+                    department=row['department'],
+                    email=row['email'],
+                    phone=row['phone'],
+                    terms_agreed=row['terms_agreed'],
                     created_at=row['created_at']
                 )
         return None
@@ -37,8 +49,8 @@ class User:
         with get_db() as db:
             cursor = db.cursor()
             cursor.execute(
-                "INSERT OR REPLACE INTO user (id, password) VALUES (?, ?)",
-                (self.id, self.password)
+                "INSERT OR REPLACE INTO user (id, password, name, student_number, department, email, phone, terms_agreed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (self.id, self.password, self.name, self.student_number, self.department, self.email, self.phone, self.terms_agreed)
             )
             db.commit()
     
