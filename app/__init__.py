@@ -58,11 +58,13 @@ def create_app(config_name='default'):
     from .blueprints.auth import auth_bp
     from .blueprints.api import api_bp
     from .blueprints.board import board_bp
+    from .blueprints.admin import admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(board_bp)
+    app.register_blueprint(admin_bp)
 
     # reverse proxy setting
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_prefix=1)
