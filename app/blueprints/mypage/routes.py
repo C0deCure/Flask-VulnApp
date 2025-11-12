@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, g, fla
 from app.models import User, Note
 from app.extensions import db
 from app.models import Free, Secret, Grad, Market, New, Info, Prom, Team
+from urllib.parse import urlparse
 
 # mypage 블루프린트 생성
 mypage_bp = Blueprint('mypage', __name__, url_prefix='/mypage')
@@ -89,6 +90,19 @@ def delete_account():
     if not g.user:
         flash('로그인이 필요합니다.', 'error')
         return redirect(url_for('auth.login'))
+    
+    # CSRF 방지를 위한 Referer 헤더 검증
+    # 요청의 출처(Referer)가 현재 우리 서버의 호스트와 일치하는지 확인
+    if not request.referrer:
+        flash('요청 출처를 확인할 수 없습니다.', 'error')
+        return redirect(url_for('mypage.profile'))
+    
+    referrer_host = urlparse(request.referrer).hostname
+    server_host = urlparse(request.host_url).hostname
+    
+    if referrer_host != server_host:
+        flash('잘못된 접근입니다.', 'error')
+        return redirect(url_for('mypage.profile'))
 
     try:
         user_to_delete = g.user
