@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask import render_template_string
 from datetime import datetime
 from jinja2.exceptions import TemplateSyntaxError
+from markupsafe import escape
 
 from app.models import User, Room, Note
 from app.models import Free, Secret, Grad, Market, New, Info, Prom, Team
@@ -32,13 +33,13 @@ def room_list():
         last_message_content = "메시지가 없습니다."
         if last_note:
             try:
-                # ▼▼▼ [수정] SSTI 컨텍스트에 config 객체를 주입합니다. ▼▼▼
+                # SSTI 컨텍스트에 config 객체를 주입
                 ssti_context = {'config': current_app.config}
                 last_message_content = render_template_string(last_note.content, **ssti_context)
             except TemplateSyntaxError:
-                last_message_content = last_note.content
+                last_message_content = escape(last_note.content)
             except Exception:
-                last_message_content = last_note.content
+                last_message_content = escape(last_note.content)
 
         processed_rooms.append({
             'room_id': room.id,
@@ -77,9 +78,9 @@ def room_detail(room_id):
                  ssti_context = {'config': current_app.config}
                  last_message_content = render_template_string(last_note.content, **ssti_context)
              except TemplateSyntaxError:
-                 last_message_content = last_note.content
+                 last_message_content = escape(last_note.content)
              except Exception:
-                 last_message_content = last_note.content
+                 last_message_content = escape(last_note.content)
         processed_rooms.append({'room_id': r.id, 'other_user_username': other_user.username if other_user else "알수없음", 'last_message': last_message_content, 'last_date': last_note.created_at if last_note else None})
 
     messages = room.notes.order_by(desc(Note.created_at)).all()
@@ -90,9 +91,9 @@ def room_detail(room_id):
             ssti_context = {'config': current_app.config}
             msg_dict['content'] = render_template_string(msg.content, **ssti_context)
         except TemplateSyntaxError:
-            msg_dict['content'] = msg.content
+            msg_dict['content'] = escape(msg.content)
         except Exception as e:
-            msg_dict['content'] = msg.content
+            msg_dict['content'] = escape(msg.content)
 
         msg_dict['created_at'] = msg.created_at.strftime('%Y-%m-%d %H:%M')
         rendered_messages.append(msg_dict)
@@ -128,12 +129,12 @@ def create_from_post(board_type, post_id):
     if request.method == 'POST':
         if receiver.id == g.user.id:
             flash('자기 자신에게는 쪽지를 보낼 수 없습니다.', 'error')
-            return redirect(request.referrer)
+            return redirect(url_for('main.board_show', board_type=board_type, post_id=post_id))
 
         content = request.form.get('content')
         if not content:
             flash('내용을 입력해주세요.', 'error')
-            return redirect(request.referrer)
+            return redirect(url_for('message.create_from_post', board_type=board_type, post_id=post_id))
 
         sender = g.user
         room = Room.query.filter(Room.users.any(User.id == sender.id)).filter(Room.users.any(User.id == receiver.id)).first()
