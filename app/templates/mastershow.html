@@ -31,12 +31,12 @@
                         <p><strong>첨부파일:</strong></p>
 
                         {% if post.file_url.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) %}
-                            <img src="{{ url_for('static', filename=post.file_url) }}"
+                            <img src="{{ url_for('board.view', filename=post.filename) }}"
                                  alt="{{ post.filename }}"
                                  style="max-width: 100%; height: auto; border: 1px solid #ddd;">
 
                         {% else %}
-                            <a href="{{ url_for('static', filename=post.file_url) }}"
+                            <a href="{{ url_for('board.view', filename=post.filename) }}"
                                target="_blank"
                                download="{{ post.filename }}">
                                 {{ post.filename or '파일 보기/다운로드' }}

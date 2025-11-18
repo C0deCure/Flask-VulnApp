@@ -1,10 +1,11 @@
 import os
+import urllib.parse
 from datetime import datetime
 from doctest import master
 
-from flask import Blueprint, url_for, redirect, render_template, request, session, g, flash, abort, current_app
+from flask import Blueprint, url_for, redirect, render_template, request, session, g, flash, abort, current_app, send_file
 from pip._internal import models
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 from flask_login import current_user, login_required
 
 from app.forms import PostForm, CommentForm
@@ -60,23 +61,26 @@ def write_post(board_url):
         title = request.form.get('title')
         text = request.form.get('text')
 
-        file_url = None
-        original_filename = None
+        db_filename = None
+        db_file_url = None
 
         if 'file_upload' in request.files:
             file = request.files['file_upload']
 
             if file and file.filename != '':
-                filename = file.filename
+                safe_filename = ''
+                if safe_filename == '':
+                    flash('유효하지 않은 파일명입니다.', 'danger')
+                    return redirect(url_for('board.write_post', board_url=board_url))
 
                 try:
-                    save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                    save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], safe_filename)
 
                     os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
                     file.save(save_path)
 
-                    file_url = f'uploads/{filename}'
+                    file_url = f'uploads/{safe_filename}'
                     original_filename = file.filename
 
                 except Exception as e:
@@ -162,3 +166,24 @@ def create_comment(board_url, post_id):
         db.session.commit()
         return redirect(url_for('board.detail', board_url=board.url, post_id=post.id))
     abort(405)
+
+@board_bp.route('/view')
+def view():
+    filename_from_user = request.args.get('filename')
+    if not filename_from_user:
+        abort(404)
+
+    if '../' in filename_from_user:
+        abort(403, "No Hack!!")
+
+    try:
+        decoded_filename = urllib.parse.unquote(filename_from_user)
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        file_path = os.path.join(upload_folder, decoded_filename)
+        if not os.path.exists(file_path):
+            abort(404)
+        return send_file(file_path)
+    except FileNotFoundError:
+        abort(404)
+    except Exception as e:
+        return str(e)
