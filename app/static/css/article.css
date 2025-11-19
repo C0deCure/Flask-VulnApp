@@ -54,7 +54,7 @@ a:active {
   text-decoration: none;
 }
 
-/*  ----------------------------헤더------------------------------ */
+
 #header {
   display: flex;
   height: 75px;
@@ -157,9 +157,7 @@ nav > div.wrap {
   font-weight: bold;
   background-color: #c62917;
 }
-/* ------------------------------------------------------- */
 
-/* ----------------------------서브메뉴-------------------- */
 
 #submenu {
   border-bottom: 1px solid #d6d6d6;
@@ -229,41 +227,19 @@ li {
   font-size: 14px;
   color: #4c4c4c;
 }
-/* #submenu > #wrapper1 {
-  margin: 0 auto;
-  padding: 0 550px;
-} */
 
-/* #submenu > div.wrap > div {
-  width: 130px;
-} */
-
-/* #wrapper1 {
-  margin: 0 auto;
-  padding: 0 280px;
-  width: 1080px;
-  background-color: black; */
-/* } */
-
-/* #submenu > .wrap > div {
-  float: left;
-  width: 100px;
-} */
-/* ------------------------------------------------------- */
-
-/* ------------------------------wrap------------ */
 #wrap {
   margin: 0 auto;
   width: 1180px;
-  /* background-color: sandybrown; */
+
 }
-/* -------------------------------------------------- */
+
 #box {
-  /* padding: 0 50px; */
+
   position: relative;
   margin: 0 auto;
   min-height: 900px;
-  /* background-color: black; */
+
   display: grid;
   grid-template-areas:
     "main main b"
@@ -319,9 +295,9 @@ li {
   position: relative;
   word-break: break-all;
   text-align: left;
-  /* height: 1000px; */
+
 }
-/* 게시판 제목 글내용 댓글 댓글 입력 설정 */
+
 #title {
   padding: 15px;
   border: 1px solid #d6d6d6;

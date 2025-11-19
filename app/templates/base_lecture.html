@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}강의실{% endblock %} - {{ lec.name }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+    
+    <style>
+       
+        .container{max-width:1000px; margin:24px auto; padding:0 16px; display:flex; gap: 40px;}
+        .sidebar-container{width: 180px; flex-shrink: 0;} 
+        .main-content{flex-grow: 1; min-width: 0;}
+        
+    
+        .card{border:1px solid #eee;border-radius:10px;padding:14px}
+        .btn{display:inline-block;border:1px solid #d6d6d6;padding:8px 12px;border-radius:8px;text-decoration:none;color:#333}
+        .btn.red{border:0;background:#c62917;color:#fff}
+        .danger{color:#c62917;font-weight:700}
+        
+      
+        .blur{filter:blur(6px);user-select:none}
+        .grid{display:grid;grid-template-columns:110px 1fr;gap:10px 16px;line-height:1.7}
+        .label{font-weight:700}
+        
+        .tab-menu{border-radius:8px; border: 1px solid #eee;} 
+        .tab-menu a{padding:10px 15px; text-decoration:none; color:#333; font-weight:700; display:block; border-left: 3px solid transparent;}
+        .tab-menu a.active{border-left-color: #c62917; background:#f8f8f8;} 
+        
+        .assessment-box{border: 1px solid #d6d6d6; border-radius: 8px; margin-top: 15px;}
+        .assessment-box button{width: 100%; padding: 10px; border: none; background: transparent; color: #c62917; font-weight: bold; cursor: pointer;}
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% include 'partials/_topbar.html' %}
+
+    <div class="container">
+        <div class="sidebar-container">
+            <h2 style="margin:0 0 4px 0">{{ lec.name }}</h2>
+            <div style="color:#777;font-size:12px;margin-bottom:12px;">{{ lec.professor }} · {{ lec.campus or '-' }}</div>
+            
+            <div class="tab-menu">
+                <a href="{{ url_for('lecture.lecture_reviews', lecture_id=lec.lecture_id) }}" 
+                   class="{% if request.endpoint == 'lecture.lecture_reviews' %}active{% endif %}">
+                    강의평
+                </a>
+                <a href="{{ url_for('lecture.lecture_exam', lecture_id=lec.lecture_id) }}" 
+                   class="{% if request.endpoint == 'lecture.lecture_exam' %}active{% endif %}">
+                    시험 정보
+                </a>
+            </div>
+            
+            {% set write_endpoint = None %}
+            {% if request.endpoint == 'lecture.lecture_reviews' %}
+                {% set write_endpoint = 'lecture.lecture_review_write' %}
+            {% elif request.endpoint == 'lecture.lecture_exam' %}
+                {% set write_endpoint = 'lecture.exam_info_write' %}
+            {% endif %}
+
+            {% if write_endpoint %}
+            <a href="{{ url_for(write_endpoint, lecture_id=lec.lecture_id) }}" style="text-decoration: none;">
+                <div class="assessment-box">
+                    <button style="width: 100%; padding: 10px; border: none; background: transparent; color: #c62917; font-weight: bold; cursor: pointer;">
+                        ➖ 평가하기
+                    </button>
+                </div>
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -59,7 +59,7 @@ a:hover,
 a:active {
   text-decoration: none;
 }
-/* ----------------------------헤더------------------------------ */
+
 #header {
   min-height: 75px;
   border-top: 1px solid #d6d6d6;
@@ -152,9 +152,7 @@ nav > div.wrap {
   font-weight: bold;
   background-color: #c62917;
 }
-/* ------------------------------------------------------- */
 
-/* ----------------------------서브메뉴-------------------- */
 
 #submenu {
   border-bottom: 1px solid #d6d6d6;

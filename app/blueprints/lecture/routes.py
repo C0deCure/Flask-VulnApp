@@ -148,8 +148,7 @@ def lecture_review_create(lecture_id):
             grading=grading, attendance=attendance, exam_count=exam_count
         )
         db.session.add(review)
-        db.session.flush()  # review.r_id 확보
-
+        db.session.flush() 
         uid = get_current_user_id()
         if uid:
             award_once(uid, +10, "LECTURE_REVIEW_CREATE", "lecture_review", review.r_id)
@@ -241,11 +240,15 @@ def exam_info_write(lecture_id):
         return "강의를 찾을 수 없습니다.", 404
     return render_template("lecture_exam_write.html", lec=lec)
 
+import pprint
+from flask import current_app
 
 @lecture_bp.route("/exams/<int:exam_id>/view", methods=["POST"], endpoint="exam_info_view")
 def exam_info_view(exam_id):
     uid = get_current_user_id()
+    current_app.logger.debug(f"[DEBUG] uid raw: {uid} (type: {type(uid)})")
     if not uid:
+        current_app.logger.debug("[DEBUG] No uid — returning login redirect")
         flash("로그인이 필요합니다.")
         return redirect(url_for("auth.login"))
 
@@ -253,28 +256,49 @@ def exam_info_view(exam_id):
     if not exam:
         return "시험정보가 없습니다.", 404
 
-    if has_unlocked_exam(uid, exam_id):
-        flash("이미 열람한 정보입니다.")
-        return redirect(url_for("lecture.lecture_exam", lecture_id=exam.lecture_id))
-
-    raw = request.form.get("point") or request.args.get("point") or "0"
+    
+    current_app.logger.debug(f"[DEBUG] request.form: {request.form.to_dict()}")
+   
+    raw = request.form.get("my_point") or request.args.get("my_point") or "0"
     try:
-        client_reported_point = int(raw)
+        user_reported_point = int(raw)
     except ValueError:
-        client_reported_point = 0
+        user_reported_point = 0
 
-    if client_reported_point < DEFAULT_EXAM_VIEW_PRICE:
-        flash("포인트가 부족합니다.\n먼저 강의평이나 시험 정보를 공유해주세요 :D")
+    if user_reported_point < DEFAULT_EXAM_VIEW_PRICE:
+        flash("포인트가 부족합니다.")
         return redirect(url_for("lecture.lecture_exam", lecture_id=exam.lecture_id))
 
+    
     add_point_event(uid, -DEFAULT_EXAM_VIEW_PRICE, "EXAM_INFO_VIEW", "exam_info", exam_id)
-    db.session.commit()
-    flash(f"열람되었습니다. ({DEFAULT_EXAM_VIEW_PRICE}P 차감)")
+    # flush so we can query uncommitted rows in the same session
+    db.session.flush()
 
+  
+    matches = PointHistory.query.filter_by(
+        user_id=uid,
+        reason="EXAM_INFO_VIEW",
+        ref_type="exam_info",
+        ref_id=exam_id
+    ).all()
+    current_app.logger.debug(f"[DEBUG] matches after add_point_event (count={len(matches)}):")
+    for m in matches:
+        current_app.logger.debug(f"  - id={m.id}, user_id={m.user_id} (type {type(m.user_id)}), ref_id={m.ref_id} (type {type(m.ref_id)}), delta={m.delta}, created_at={m.created_at}")
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.exception("[DEBUG] commit failed")
+        db.session.rollback()
+        flash("처리 중 오류 발생")
+        return redirect(url_for("lecture.lecture_exam", lecture_id=exam.lecture_id))
+
+    flash(f"열람되었습니다. ({DEFAULT_EXAM_VIEW_PRICE}P 차감)")
     return redirect(url_for("lecture.lecture_exam", lecture_id=exam.lecture_id))
 
 
-# exam body 파싱
+
+
 def parse_exam_body(body: str):
     out = {"strategy": "", "types": "", "samples": []}
     if not body:
@@ -300,13 +324,11 @@ def point_history():
         flash("로그인이 필요합니다.")
         return redirect(url_for("auth.login"))
 
-    # 내역 전체
+    
     rows = PointHistory.query.filter_by(user_id=uid).order_by(PointHistory.created_at.desc()).all()
 
-    # 총합 계산
     total_points = sum(r.delta for r in rows)
 
-    # reason 매핑 테이블
     REASON_MAP = {
         "EXAM_INFO_CREATE": "시험 정보 공유",
         "EXAM_INFO_VIEW": "시험 정보 조회",
