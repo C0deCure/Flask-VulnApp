@@ -14,7 +14,7 @@
                 <h3 class="large">{{ post.user.username }}</h3>
                 <time class="large">생성 날짜 : {{ post.created_at }}</time>
                 <time class="large">수정 날짜 : {{ post.updated_at }}</time>
-                {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                {% if current_user.is_authenticated and (current_user.id == post.user_id or current_user.is_admin) %}
                     <a href="/board/{{ board.url }}/delete/{{ post.id }}">
                         <p class="delete">삭제</p>
                     </a>
@@ -24,7 +24,7 @@
                 {% endif %}
                 <h2 class="large">{{ post.title }}</h2>
 
-                <p id="post-text" class="large"></p>
+                <p id="post-text" class="large">{{ post.text | safe }}</p>
 
                 {% if post.file_url %}
                     <div class="uploaded-file" style="margin-top: 20px; padding: 10px; border: 1px dashed #ccc;">

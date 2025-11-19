@@ -13,8 +13,8 @@
             {% for master in masters %}
                 <article>
                     <a href="{{ url_for('board.detail', board_url=board.url ,post_id=master.id) }}" class="articlelist">
-                        <h2 class="medium">{{ master.title }}</h2>
-                        <p class="small">{{ master.text }}</p>
+                        <h2 class="medium">{{ master.title | striptags | truncate(100) }}</h2>
+                        <p class="small">{{ master.text | striptags | truncate(100) }}</p>
                         <h3 class="small">{{ master.id }}</h3>
                     </a>
                     <div class="blanc"></div>

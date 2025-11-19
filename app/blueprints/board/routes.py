@@ -12,6 +12,7 @@ from app.forms import PostForm, CommentForm
 from app.models import User, Board, Post, Comment
 from app import forms, db
 
+import unicodedata
 
 # 게시판 테이블 매핑
 BOARD_TABLES = {
@@ -41,12 +42,36 @@ def board_list(board_url):
                            board=board,
                            masters=post_list)
 
+
+def xss_blacklist_filter(text):
+    if not text:
+        return text
+
+    blacklist = [
+        '<script>', '</script>',
+        'javascript:',
+        'onload', 'onerror',
+        'alert',
+        'cookie'
+    ]
+
+    for word in blacklist:
+        text = text.replace(word, "")
+
+    return text
+
 # TODO : Modify the template(mastershow) to implement the comment.
 @board_bp.route('/<board_url>/<int:post_id>', methods=['GET', 'POST'])
 def detail(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
+
+    if post.text:
+        post.text = xss_blacklist_filter(post.text)
+
+    post.text = unicodedata.normalize('NFKC', post.text)
+
     return render_template('mastershow.html', board=board, post=post)
 
 # # Is it safe about CSRF?
@@ -61,8 +86,8 @@ def write_post(board_url):
         title = request.form.get('title')
         text = request.form.get('text')
 
-        db_filename = None
-        db_file_url = None
+        original_filename = None
+        file_url = None
 
         if 'file_upload' in request.files:
             file = request.files['file_upload']
@@ -111,7 +136,7 @@ def delete_post(board_url, post_id):
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
     # Considering creating a vulnerability by making the username use only lowercase letters instead of user.id
-    if current_user.id != post.user_id:
+    if post.user_id != current_user.id and not current_user.is_admin:
         # TODO : flash and redirect
         abort(403)
     db.session.delete(post)
@@ -125,7 +150,7 @@ def edit_post(board_url, post_id):
     """<UNK> <UNK> <UNK>"""
     post = Post.query.get_or_404(post_id)
     board = Board.query.get_or_404(post.board_id)
-    if current_user.id != post.user_id:
+    if post.user_id != current_user.id and not current_user.is_admin:
         # TODO : flash and redirect
         abort(403)
     if request.method == 'POST':
